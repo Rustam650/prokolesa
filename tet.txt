@@ -1,0 +1,17 @@
+https://github.com/Rustam650/prokolesa.git
+
+IPv4
+217.199.252.133
+
+IPv6
+2a03:6f00:a::ea8a
+
+
+Подключение по SSH
+ssh root@217.199.252.133
+
+Root-пароль
+yT+E3qPU4KNdg-
+
+Закрытые порты
+25, 3389, 2525, 587, 389, 53413, 465

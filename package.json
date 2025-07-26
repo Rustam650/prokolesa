@@ -1,0 +1,24 @@
+{
+  "name": "prokolesa-fullstack",
+  "version": "1.0.0",
+  "description": "ProKolesa - интернет-магазин шин и дисков",
+  "scripts": {
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && source venv/bin/activate && python manage.py runserver 127.0.0.1:8001",
+    "install:all": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
+    "build": "cd frontend && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "react",
+    "django",
+    "ecommerce",
+    "tires",
+    "wheels"
+  ],
+  "author": "ProKolesa Team",
+  "license": "MIT"
+}

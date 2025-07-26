@@ -1,0 +1,82 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+{
+  "version": "2.0",
+  "projectType": "fullstack",
+  "rules": [
+    // ==================== REACT ====================
+    {
+      "name": "React Functional Component",
+      "description": "TS-компоненты с PropTypes",
+      "pattern": "**/*.{tsx,jsx}",
+      "template": "import React from 'react';\n\ninterface Props {\n  // типы пропсов\n}\n\nconst ComponentName = ({}: Props) => {\n  const [state, setState] = React.useState(null);\n\n  return (\n    <div className=\"container\">\n      {/* JSX */}\n    </div>\n  );\n};\n\nexport default ComponentName;"
+    },
+    {
+      "name": "React Hooks",
+      "pattern": "**/hooks/*.ts",
+      "template": "import { useEffect } from 'react';\n\nexport const useCustomHook = () => {\n  useEffect(() => {\n    // логика\n  }, []);\n};"
+    },
+
+    // ==================== PWA ====================
+    {
+      "name": "PWA Manifest",
+      "description": "Базовый manifest.json",
+      "pattern": "public/manifest.json",
+      "template": "{\n  \"name\": \"My PWA\",\n  \"short_name\": \"PWA\",\n  \"start_url\": \"/\",\n  \"display\": \"standalone\",\n  \"theme_color\": \"#3367D6\",\n  \"icons\": [\n    {\n      \"src\": \"/icons/icon-192x192.png\",\n      \"sizes\": \"192x192\",\n      \"type\": \"image/png\"\n    }\n  ]\n}"
+    },
+    {
+      "name": "Service Worker",
+      "pattern": "public/sw.js",
+      "template": "const CACHE_NAME = 'v1';\n\nself.addEventListener('install', (e) => {\n  e.waitUntil(\n    caches.open(CACHE_NAME)\n      .then(cache => cache.addAll(['/']))\n  );\n});\n\nself.addEventListener('fetch', (e) => {\n  e.respondWith(\n    caches.match(e.request)\n      .then(response => response || fetch(e.request))\n  );\n});"
+    },
+
+    // ==================== DJANGO ====================
+    {
+      "name": "Django REST Endpoint",
+      "pattern": "**/api/views.py",
+      "template": "from rest_framework.decorators import api_view\nfrom rest_framework.response import Response\n\n@api_view(['GET'])\ndef endpoint(request):\n    \"\"\"\n    Пример API Endpoint\n    \"\"\"\n    return Response({'data': 'success'})"
+    },
+    {
+      "name": "Django Model",
+      "pattern": "**/models.py",
+      "template": "from django.db import models\n\nclass ModelName(models.Model):\n    \"\"\"\n    Докстринг модели\n    \"\"\"\n    name = models.CharField(max_length=100)\n    created_at = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return self.name"
+    },
+
+    // ==================== UI/UX ====================
+    {
+      "name": "Tailwind Component",
+      "pattern": "**/*.module.css",
+      "template": ".container {\n  @apply mx-auto max-w-7xl px-4;\n}\n\n.btn-primary {\n  @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600;\n}"
+    },
+    {
+      "name": "Responsive Breakpoints",
+      "pattern": "**/styles/*.css",
+      "template": "@media (max-width: 640px) {\n  .mobile-hide { display: none; }\n}\n\n@media (min-width: 1024px) {\n  .desktop-only { display: block; }\n}"
+    }
+  ],
+  "settings": {
+    "autoImport": {
+      "react": "import React from 'react'",
+      "react-dom": "import ReactDOM from 'react-dom'",
+      "axios": "import axios from 'axios'"
+    },
+    "linting": {
+      "enforcePropTypes": true,
+      "requireJSXClosingBracket": true
+    },
+    "ignoredPatterns": [
+      "**/__pycache__/**",
+      "**/.next/**",
+      "**/node_modules/**"
+    ]
+  },
+  "workflows": {
+    "onComponentCreate": {
+      "action": "generateStory",
+      "template": "// Автогенерация Storybook-стори\nimport Component from './Component';\n\nexport default {\n  title: 'Components/Component'\n};\n\nexport const Default = () => <Component />;"
+    }
+  }
+}

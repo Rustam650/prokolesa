@@ -14,3 +14,8 @@ soupsieve==2.7
 sqlparse==0.5.3
 typing_extensions==4.14.0
 urllib3==2.5.0
+gunicorn==21.2.0
+mysqlclient==2.2.4
+redis==5.0.1
+psutil==5.9.8
+python-dotenv==1.0.1

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // Базовый URL для API
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://prokolesa.pro' 
+  : 'http://localhost:8000';
 
 // Создаем экземпляр axios с базовой конфигурацией
 const api = axios.create({

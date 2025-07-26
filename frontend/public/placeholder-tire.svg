@@ -1,0 +1,30 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#F8F9FA"/>
+  
+  <!-- Внешний круг шины -->
+  <circle cx="100" cy="100" r="80" fill="#2C3E50" stroke="#34495E" stroke-width="2"/>
+  
+  <!-- Внутренний круг (диск) -->
+  <circle cx="100" cy="100" r="45" fill="#BDC3C7" stroke="#95A5A6" stroke-width="2"/>
+  
+  <!-- Протектор (линии) -->
+  <g stroke="#34495E" stroke-width="1.5" opacity="0.7">
+    <line x1="30" y1="100" x2="50" y2="100"/>
+    <line x1="150" y1="100" x2="170" y2="100"/>
+    <line x1="100" y1="30" x2="100" y2="50"/>
+    <line x1="100" y1="150" x2="100" y2="170"/>
+    
+    <line x1="42" y1="58" x2="58" y2="74"/>
+    <line x1="142" y1="126" x2="158" y2="142"/>
+    <line x1="58" y1="126" x2="42" y2="142"/>
+    <line x1="158" y1="58" x2="142" y2="74"/>
+  </g>
+  
+  <!-- Центральная точка -->
+  <circle cx="100" cy="100" r="8" fill="#7F8C8D"/>
+  
+  <!-- Текст -->
+  <text x="100" y="190" text-anchor="middle" fill="#6C757D" font-family="Arial, sans-serif" font-size="12">
+    Изображение шины
+  </text>
+</svg> 

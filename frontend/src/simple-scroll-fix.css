@@ -1,0 +1,18 @@
+/* Простое предотвращение автоскролла */
+html {
+  scroll-behavior: auto !important;
+}
+
+body {
+  scroll-behavior: auto !important;
+}
+
+/* Предотвращаем скролл при фокусе на input */
+input:focus {
+  scroll-margin: 0 !important;
+}
+
+/* Отключаем smooth scroll для всех элементов */
+* {
+  scroll-behavior: auto !important;
+} 

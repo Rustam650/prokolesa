@@ -1,0 +1,47 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#F8F9FA"/>
+  
+  <!-- Внешний круг диска -->
+  <circle cx="100" cy="100" r="80" fill="#E8E8E8" stroke="#D0D0D0" stroke-width="2"/>
+  
+  <!-- Спицы диска -->
+  <g fill="#C0C0C0" stroke="#B0B0B0" stroke-width="1">
+    <!-- Спица 1 -->
+    <path d="M100 100 L100 30 A70 70 0 0 1 149 50 Z"/>
+    <!-- Спица 2 -->
+    <path d="M100 100 L149 50 A70 70 0 0 1 170 100 Z"/>
+    <!-- Спица 3 -->
+    <path d="M100 100 L170 100 A70 70 0 0 1 149 150 Z"/>
+    <!-- Спица 4 -->
+    <path d="M100 100 L149 150 A70 70 0 0 1 100 170 Z"/>
+    <!-- Спица 5 -->
+    <path d="M100 100 L100 170 A70 70 0 0 1 51 150 Z"/>
+    <!-- Спица 6 -->
+    <path d="M100 100 L51 150 A70 70 0 0 1 30 100 Z"/>
+    <!-- Спица 7 -->
+    <path d="M100 100 L30 100 A70 70 0 0 1 51 50 Z"/>
+    <!-- Спица 8 -->
+    <path d="M100 100 L51 50 A70 70 0 0 1 100 30 Z"/>
+  </g>
+  
+  <!-- Центральная ступица -->
+  <circle cx="100" cy="100" r="25" fill="#A0A0A0" stroke="#909090" stroke-width="2"/>
+  
+  <!-- Болты крепления -->
+  <g fill="#808080">
+    <circle cx="100" cy="75" r="3"/>
+    <circle cx="118" cy="82" r="3"/>
+    <circle cx="118" cy="118" r="3"/>
+    <circle cx="100" cy="125" r="3"/>
+    <circle cx="82" cy="118" r="3"/>
+    <circle cx="82" cy="82" r="3"/>
+  </g>
+  
+  <!-- Центральное отверстие -->
+  <circle cx="100" cy="100" r="8" fill="#707070"/>
+  
+  <!-- Текст -->
+  <text x="100" y="190" text-anchor="middle" fill="#6C757D" font-family="Arial, sans-serif" font-size="12">
+    Изображение диска
+  </text>
+</svg> 

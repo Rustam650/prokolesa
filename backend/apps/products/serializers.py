@@ -22,10 +22,24 @@ class BrandSerializer(serializers.ModelSerializer):
 
 class ProductImageSerializer(serializers.ModelSerializer):
     """Сериализатор для изображений товаров"""
+    image = serializers.SerializerMethodField()
     
     class Meta:
         model = ProductImage
         fields = ['id', 'image', 'alt_text', 'title', 'is_main', 'sort_order']
+    
+    def get_image(self, obj):
+        """Возвращает полный URL изображения"""
+        if obj.image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.image.url)
+            # Если контекста нет, возвращаем полный URL с хостом по умолчанию
+            from django.conf import settings
+            if hasattr(settings, 'SITE_URL'):
+                return f"{settings.SITE_URL}{obj.image.url}"
+            return f"https://prokolesa.pro{obj.image.url}"
+        return None
 
 
 class TireProductSerializer(serializers.ModelSerializer):

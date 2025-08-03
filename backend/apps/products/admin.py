@@ -35,7 +35,7 @@ class BrandAdmin(ModelAdmin):
 
 @register(TireProduct)
 class TireProductAdmin(ModelAdmin):
-    list_display = ['name', 'brand', 'tire_size_display', 'season', 'price', 'stock_quantity', 'is_active']
+    list_display = ['name', 'brand', 'tire_size_display', 'season', 'price', 'stock_quantity', 'image_preview', 'is_active']
     list_filter = ['season', 'is_active', 'is_featured', 'brand', 'category']
     search_fields = ['name', 'sku', 'brand__name']
     prepopulated_fields = {'slug': ('name',)}
@@ -46,6 +46,30 @@ class TireProductAdmin(ModelAdmin):
     def tire_size_display(self, obj):
         return f"{obj.width}/{obj.profile}R{obj.diameter}"
     tire_size_display.short_description = _('Size')
+    
+    def image_preview(self, obj):
+        """Отображение превью изображения товара"""
+        from django.contrib.contenttypes.models import ContentType
+        content_type = ContentType.objects.get_for_model(obj)
+        main_image = ProductImage.objects.filter(
+            content_type=content_type,
+            object_id=obj.id,
+            is_main=True
+        ).first()
+        
+        if not main_image:
+            main_image = ProductImage.objects.filter(
+                content_type=content_type,
+                object_id=obj.id
+            ).first()
+        
+        if main_image and main_image.image:
+            return format_html(
+                '<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />',
+                main_image.image.url
+            )
+        return "Нет изображения"
+    image_preview.short_description = _('Image')
     
     fieldsets = (
         (_('Basic Information'), {
@@ -80,7 +104,7 @@ class TireProductAdmin(ModelAdmin):
 
 @register(WheelProduct)
 class WheelProductAdmin(ModelAdmin):
-    list_display = ['name', 'brand', 'wheel_size_display', 'wheel_type', 'price', 'stock_quantity', 'is_active']
+    list_display = ['name', 'brand', 'wheel_size_display', 'wheel_type', 'price', 'stock_quantity', 'image_preview', 'is_active']
     list_filter = ['wheel_type', 'is_active', 'is_featured', 'brand', 'category']
     search_fields = ['name', 'sku', 'brand__name']
     prepopulated_fields = {'slug': ('name',)}
@@ -91,6 +115,30 @@ class WheelProductAdmin(ModelAdmin):
     def wheel_size_display(self, obj):
         return f"{obj.diameter}x{obj.width}"
     wheel_size_display.short_description = _('Size')
+    
+    def image_preview(self, obj):
+        """Отображение превью изображения товара"""
+        from django.contrib.contenttypes.models import ContentType
+        content_type = ContentType.objects.get_for_model(obj)
+        main_image = ProductImage.objects.filter(
+            content_type=content_type,
+            object_id=obj.id,
+            is_main=True
+        ).first()
+        
+        if not main_image:
+            main_image = ProductImage.objects.filter(
+                content_type=content_type,
+                object_id=obj.id
+            ).first()
+        
+        if main_image and main_image.image:
+            return format_html(
+                '<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />',
+                main_image.image.url
+            )
+        return "Нет изображения"
+    image_preview.short_description = _('Image')
     
     fieldsets = (
         (_('Basic Information'), {

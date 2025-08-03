@@ -1,8 +1,9 @@
 from django.contrib import admin
+from apps.core.admin_base import ModelAdmin, register
 from .models import Order, OrderItem
 
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+@register(Order)
+class OrderAdmin(ModelAdmin):
     list_display = ['order_number', 'customer_name', 'customer_phone', 'status', 'payment_status', 'delivery_method', 'total_amount', 'created_at']
     list_filter = ['status', 'payment_status', 'delivery_method', 'payment_method', 'created_at']
     search_fields = ['order_number', 'customer_name', 'customer_phone', 'customer_email']
@@ -27,8 +28,9 @@ class OrderAdmin(admin.ModelAdmin):
         }),
     )
 
-@admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
+@register(OrderItem)
+class OrderItemAdmin(ModelAdmin):
     list_display = ['order', 'product_name', 'quantity', 'unit_price', 'total_price']
-    list_filter = ['created_at']
+    list_filter = ['order__status', 'order__created_at']
     search_fields = ['order__order_number', 'product_name']
+    ordering = ['-order__created_at']

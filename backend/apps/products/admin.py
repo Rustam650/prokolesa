@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.contrib.contenttypes.admin import GenericTabularInline
+from apps.core.admin_base import ModelAdmin, register
 from .models import Category, Brand, TireProduct, WheelProduct, ProductImage
 
 
@@ -12,8 +13,8 @@ class ProductImageInline(GenericTabularInline):
     readonly_fields = []
 
 
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+@register(Category)
+class CategoryAdmin(ModelAdmin):
     list_display = ['name', 'parent', 'is_active', 'sort_order']
     list_filter = ['is_active', 'parent']
     search_fields = ['name', 'description']
@@ -22,8 +23,8 @@ class CategoryAdmin(admin.ModelAdmin):
     ordering = ['sort_order', 'name']
 
 
-@admin.register(Brand)
-class BrandAdmin(admin.ModelAdmin):
+@register(Brand)
+class BrandAdmin(ModelAdmin):
     list_display = ['name', 'product_types', 'country', 'rating', 'popularity_score', 'is_active', 'is_featured']
     list_filter = ['is_active', 'is_featured', 'product_types', 'country']
     search_fields = ['name', 'description', 'country']
@@ -32,8 +33,8 @@ class BrandAdmin(admin.ModelAdmin):
     ordering = ['-popularity_score', 'name']
 
 
-@admin.register(TireProduct)
-class TireProductAdmin(admin.ModelAdmin):
+@register(TireProduct)
+class TireProductAdmin(ModelAdmin):
     list_display = ['name', 'brand', 'tire_size_display', 'season', 'price', 'stock_quantity', 'is_active']
     list_filter = ['season', 'is_active', 'is_featured', 'brand', 'category']
     search_fields = ['name', 'sku', 'brand__name']
@@ -77,8 +78,8 @@ class TireProductAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(WheelProduct)
-class WheelProductAdmin(admin.ModelAdmin):
+@register(WheelProduct)
+class WheelProductAdmin(ModelAdmin):
     list_display = ['name', 'brand', 'wheel_size_display', 'wheel_type', 'price', 'stock_quantity', 'is_active']
     list_filter = ['wheel_type', 'is_active', 'is_featured', 'brand', 'category']
     search_fields = ['name', 'sku', 'brand__name']
@@ -118,8 +119,8 @@ class WheelProductAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(ProductImage)
-class ProductImageAdmin(admin.ModelAdmin):
+@register(ProductImage)
+class ProductImageAdmin(ModelAdmin):
     list_display = ['content_object', 'image_preview', 'is_main', 'sort_order']
     list_filter = ['is_main', 'content_type']
     ordering = ['content_type', 'object_id', 'sort_order']

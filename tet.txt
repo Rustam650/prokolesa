@@ -152,3 +152,8 @@ sudo systemctl restart gunicorn
 - ✅ Все сервисы под `www-data`
 
 **Готово для запуска! 🎉** Просто выполните команду развертывания на сервере TimeWeb.
+
+
+URL: https://prokolesa.pro/admin/
+Email: prokolesa@mail.ru
+Пароль: pro123kolesa45678

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from apps.core.admin_base import ModelAdmin, register
 from .models import User, UserProfile, Address
 
 
@@ -28,12 +29,11 @@ class UserProfileInline(admin.StackedInline):
 class AddressInline(admin.TabularInline):
     model = Address
     extra = 0
-    fields = ['type', 'title', 'city', 'street', 'house', 'is_default']
     readonly_fields = ['created_at']
 
 
-@admin.register(User)
-class UserAdmin(BaseUserAdmin):
+@register(User)
+class UserAdmin(BaseUserAdmin, ModelAdmin):
     list_display = [
         'email', 'username', 'full_name', 'phone', 'city', 
         'loyalty_points', 'total_spent', 'is_verified', 'is_active', 'date_joined'
@@ -79,18 +79,12 @@ class UserAdmin(BaseUserAdmin):
     )
     
     add_fieldsets = (
-        (_('Authentication'), {
-            'fields': ('email', 'username', 'password1', 'password2')
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'username', 'password1', 'password2'),
         }),
-        (_('Personal Info'), {
-            'fields': ('first_name', 'last_name', 'phone')
-        }),
-        (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser')
-        })
     )
     
-    readonly_fields = ['last_login', 'date_joined', 'last_activity']
     inlines = [UserProfileInline, AddressInline]
     
     def full_name(self, obj):
@@ -101,8 +95,8 @@ class UserAdmin(BaseUserAdmin):
         return super().get_queryset(request).select_related('profile')
 
 
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
+@register(UserProfile)
+class UserProfileAdmin(ModelAdmin):
     list_display = [
         'user', 'car_make', 'car_model', 'car_year', 
         'theme_preference', 'language', 'created_at'
@@ -138,34 +132,22 @@ class UserProfileAdmin(admin.ModelAdmin):
         return super().get_queryset(request).select_related('user')
 
 
-@admin.register(Address)
-class AddressAdmin(admin.ModelAdmin):
-    list_display = [
-        'user', 'type', 'title', 'city', 'street', 'house', 
-        'is_default', 'created_at'
-    ]
-    list_filter = [
-        'type', 'is_default', 'country', 'region', 'city', 'created_at'
-    ]
-    search_fields = [
-        'user__email', 'user__username', 'title', 'city', 'street'
-    ]
+@register(Address)
+class AddressAdmin(ModelAdmin):
+    list_display = ['user', 'type', 'city', 'address', 'postal_code', 'is_default', 'created_at']
+    list_filter = ['type', 'city', 'is_default', 'created_at']
+    search_fields = ['user__email', 'user__username', 'city', 'address']
     ordering = ['-created_at']
-    list_editable = ['is_default']
     
     fieldsets = (
-        (_('User & Type'), {
-            'fields': ('user', 'type', 'title')
+        (_('User'), {
+            'fields': ('user',)
         }),
-        (_('Address'), {
-            'fields': ('country', 'region', 'city', 'street', 'house', 'apartment', 'postal_code')
+        (_('Address Information'), {
+            'fields': ('type', 'city', 'address', 'postal_code', 'apartment', 'entrance', 'floor', 'intercom')
         }),
-        (_('Coordinates'), {
-            'fields': ('latitude', 'longitude'),
-            'classes': ('collapse',)
-        }),
-        (_('Settings'), {
-            'fields': ('is_default',)
+        (_('Additional'), {
+            'fields': ('is_default', 'notes')
         })
     )
     

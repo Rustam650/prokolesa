@@ -14,25 +14,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
+from apps.core.admin_base import admin_site
 
 # Кастомизация админ-панели
-admin.site.site_header = 'ProKolesa - Панель управления'
-admin.site.site_title = 'ProKolesa Admin'
-admin.site.index_title = 'Добро пожаловать в панель управления ProKolesa'
+admin_site.site_header = 'ProKolesa - Панель управления'
+admin_site.site_title = 'ProKolesa Admin'
+admin_site.index_title = 'Добро пожаловать в панель управления ProKolesa'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
     path('api/', include('apps.products.urls')),
-    path('', include('apps.orders.urls')),
-    path('i18n/', include('django.conf.urls.i18n')),
 ]
 
-# Добавляем обслуживание медиа файлов в режиме разработки
+# Обслуживание медиа файлов в режиме разработки
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# Интернационализация
+urlpatterns += i18n_patterns(
+    # Здесь можно добавить URL-паттерны, которые должны поддерживать мультиязычность
+)

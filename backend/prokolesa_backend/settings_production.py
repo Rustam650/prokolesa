@@ -103,5 +103,89 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        'KEY_PREFIX': 'prokolesa',
+        'TIMEOUT': 300,  # 5 минут по умолчанию
+        'VERSION': 1,
     }
+}
+
+# Предотвращение кэширования для админки
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+
+# Настройки сессий для предотвращения утечки состояния
+SESSION_COOKIE_AGE = 3600  # 1 час
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Дополнительные настройки безопасности для админки
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# Настройки для предотвращения проблем с CSRF в админке
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Strict'
+
+# Принудительное использование HTTPS
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000  # 1 год
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Логирование для отладки проблем с админкой
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/prokolesa/django.log',
+            'formatter': 'verbose',
+        },
+        'admin_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/prokolesa/admin.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.contrib.admin': {
+            'handlers': ['admin_file', 'console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'apps.core.admin_base': {
+            'handlers': ['admin_file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
 } 

@@ -71,4 +71,34 @@ input:focus {
     font-size: 1.6rem !important;
     line-height: 1.2 !important;
   }
+  
+  /* Мобильные стили для карточек товаров */
+  .MuiCard-root {
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Ограничиваем ширину карточек на очень маленьких экранах */
+  @media only screen and (max-width: 480px) {
+    .MuiCard-root {
+      max-width: 280px !important;
+      margin: 0 auto !important;
+    }
+  }
+  
+  /* Уменьшаем отступы в карточках на мобильных */
+  .MuiCardContent-root {
+    padding: 12px !important;
+  }
+  
+  /* Уменьшаем высоту изображений в карточках на мобильных */
+  .MuiCardMedia-root {
+    height: 160px !important;
+  }
+  
+  /* Компактные кнопки на мобильных */
+  .MuiButton-root {
+    font-size: 0.8rem !important;
+    padding: 8px 16px !important;
+  }
 } 

@@ -1215,9 +1215,9 @@ const CatalogPage = (): React.ReactElement => {
               </Paper>
             ) : (
               <>
-                <Grid container spacing={{ xs: 2, md: 3 }}>
+                <Grid container spacing={{ xs: 1.5, md: 3 }}>
                   {mapProductsToCards(products).map((productCard) => (
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={productCard.id}>
+                    <Grid size={{ xs: 6, sm: 6, md: 4 }} key={productCard.id}>
                       <UniversalProductCard
                         product={productCard}
                         variant="default"

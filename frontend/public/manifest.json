@@ -1,7 +1,7 @@
 {
   "short_name": "ProKolesa",
-  "name": "ProKolesa - Шины и диски",
-  "description": "Современный интернет-магазин шин и дисков с AR примеркой и AI подбором",
+  "name": "ProKolesa.pro - Шины и Диски",
+  "description": "Современный интернет-магазин шин и дисков с широким ассортиментом",
   "icons": [
     {
       "src": "favicon.ico",
@@ -9,62 +9,41 @@
       "type": "image/x-icon"
     },
     {
+      "src": "favicon-16x16.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "favicon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#1976d2",
+  "theme_color": "#f44336",
   "background_color": "#ffffff",
   "orientation": "portrait-primary",
   "categories": ["shopping", "automotive"],
   "lang": "ru",
-  "scope": "/",
   "prefer_related_applications": false,
-  "shortcuts": [
-    {
-      "name": "Каталог шин",
-      "short_name": "Шины",
-      "description": "Просмотр каталога шин",
-      "url": "/tires",
-      "icons": [{ "src": "/icons/tire-icon.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Каталог дисков",
-      "short_name": "Диски",
-      "description": "Просмотр каталога дисков",
-      "url": "/wheels",
-      "icons": [{ "src": "/icons/wheel-icon.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Корзина",
-      "short_name": "Корзина",
-      "description": "Просмотр корзины",
-      "url": "/cart",
-      "icons": [{ "src": "/icons/cart-icon.png", "sizes": "96x96" }]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshots/desktop-home.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Главная страница ProKolesa"
-    },
-    {
-      "src": "/screenshots/mobile-catalog.png",
-      "sizes": "375x812",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Каталог товаров"
-    }
-  ]
+  "version": "1.3.0"
 }

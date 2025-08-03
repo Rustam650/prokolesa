@@ -22,16 +22,16 @@ echo "📁 Creating application directory..."
 mkdir -p /var/www/prokolesa
 mkdir -p /var/log/prokolesa
 
-# Clone repository
-echo "📥 Cloning repository..."
-cd /var/www
-if [ -d "prokolesa" ]; then
-    cd prokolesa
+# Clone or update repository
+echo "📥 Cloning/updating repository..."
+if [ -d "/var/www/prokolesa/.git" ]; then
+    cd /var/www/prokolesa
     git pull origin main
 else
-    git clone https://github.com/Rustam650/prokolesa.git
-    cd prokolesa
+    git clone https://github.com/Rustam650/prokolesa.git /var/www/prokolesa
+    cd /var/www/prokolesa
 fi
+
 
 # Set permissions
 chown -R www-data:www-data /var/www/prokolesa

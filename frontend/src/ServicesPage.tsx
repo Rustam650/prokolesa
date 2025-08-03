@@ -3,18 +3,8 @@ import {
   Container, 
   Typography, 
   Box, 
-  Card, 
-  CardContent, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Paper, 
   Tabs, 
-  Tab, 
-  Chip,
+  Tab,
   Alert
 } from '@mui/material';
 import { Build, CarRepair, Palette, Settings } from '@mui/icons-material';
@@ -37,7 +27,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ py: 3 }}>
           {children}
         </Box>
       )}
@@ -64,59 +54,128 @@ const ServicesPage = () => {
     { name: 'Балансировка 4 колеса', r10r14: '720', r15: '800', r16: '880', r17: '920', r18: '1020', r19: '1080', r20: '1300', r21r22: '2000' }
   ];
 
-  // Услуги для автомобилей 2-4 классов
+  // Дополнительные услуги
+  const additionalServices = [
+    { name: 'Заклейка проколов', price: '350' },
+    { name: 'Ремонт боковых порезов', price: '800' },
+    { name: 'Мойка колес', price: '100' },
+    { name: 'Снятие секреток', price: '500' },
+    { name: 'Хранение колес (сезон)', price: '2000' },
+    { name: 'Установка датчиков давления', price: '1200' }
+  ];
+
+  // Премиум услуги
   const premiumServices = [
-    { name: 'Снять/установить', r14r15: '250', r16: '250', r17: '130', r18: '175', r19: '225', r20: '250', r21r22: '372' },
-    { name: 'Демонтаж', r14r15: '200', r16: '200', r17: '105', r18: '115', r19: '140', r20: '150', r21r22: '250' },
-    { name: 'Монтаж', r14r15: '100', r16: '100', r17: '105', r18: '115', r19: '140', r20: '150', r21r22: '250' },
-    { name: 'Электронная балансировка', r14r15: '200', r16: '200', r17: '120', r18: '140', r19: '150', r20: '225', r21r22: '250' },
-    { name: 'Снять/установить 4 колеса', r14r15: '1800', r16: '1800', r17: '1050', r18: '1380', r19: '1500', r20: '2000', r21r22: '2500' },
-    { name: 'Снять/установить 4 колеса', r14r15: '1000', r16: '1000', r17: '520', r18: '700', r19: '900', r20: '1000', r21r22: '1250' },
-    { name: 'Комплекс 1 колеса', r14r15: '650', r16: '650', r17: '450', r18: '500', r19: '625', r20: '750', r21r22: '1000' },
-    { name: 'Комплекс 4х колес', r14r15: '2600', r16: '2600', r17: '1800', r18: '2000', r19: '2500', r20: '3000', r21r22: '4000' }
+    { name: 'Снять/установить', r14r15: '130', r16: '175', r17: '225', r18: '250', r19: '372', r20: '400', r21r22: '450' },
+    { name: 'Демонтаж', r14r15: '105', r16: '115', r17: '140', r18: '150', r19: '250', r20: '300', r21r22: '350' },
+    { name: 'Монтаж', r14r15: '105', r16: '115', r17: '140', r18: '150', r19: '250', r20: '300', r21r22: '350' },
+    { name: 'Электронная балансировка', r14r15: '120', r16: '140', r17: '150', r18: '225', r19: '250', r20: '300', r21r22: '350' },
+    { name: 'Комплекс 4 колеса', r14r15: '1050', r16: '1380', r17: '1500', r18: '2000', r19: '2500', r20: '3000', r21r22: '3500' },
+    { name: 'Снять/установить 4 колеса', r14r15: '520', r16: '700', r17: '900', r18: '1000', r19: '1250', r20: '1500', r21r22: '1750' }
   ];
 
   // Правка дисков
   const diskServices = [
-    { name: 'Правка литых дисков', r13r14: '500', r15: '600', r16: '700', r17: '800', r18: '900', r19: '1000', r20: '1200', r21r22: '1500' },
-    { name: 'Прокат дисков', r13r14: '300', r15: '400', r16: '500', r17: '-', r18: '-', r19: '-', r20: '-', r21r22: '-' }
-  ];
-
-  // Дополнительные услуги
-  const additionalServices = [
-    { name: 'Взрывная подкачка (за 1 колесо)', price: '700' },
-    { name: 'Установка 1 вентиля', price: '50' },
-    { name: 'Герметизация бортов (за одно колесо)', price: '150' },
-    { name: 'Зачистка бортов шлифмашиной (за 1 колесо)', price: '150' },
-    { name: 'Бесконтактная мойка колеса (1шт)', price: '50' },
-    { name: 'Снятие/установка камеры', price: '700' },
-    { name: 'Установка 1 датчика', price: '100' },
-    { name: 'Ремонт прокола грибком/заплаткой', price: '300' },
-    { name: 'Установка кордовой латки', price: '1000' },
-    { name: 'Ремонт 1 бокового пореза (включает вулканизацию и латку)', price: 'от 7500' },
-    { name: 'Снятие 1-й секретки', price: 'от 500' },
-    { name: 'Нарезание резьбы на 1 шпильке или на 1 ступице', price: '300' }
+    { name: 'Правка литого диска', r13r14: '1500', r15: '1800', r16: '2000', r17: '2200', r18: '2500', r19: '2800', r20: '3000', r21r22: '3500' },
+    { name: 'Прокат штампованного диска', r13r14: '800', r15: '900', r16: '1000', r17: '1100', r18: '1200', r19: '1300', r20: '1400', r21r22: '1500' },
+    { name: 'Сварка трещин', r13r14: '2000', r15: '2200', r16: '2400', r17: '2600', r18: '2800', r19: '3000', r20: '3200', r21r22: '3500' }
   ];
 
   // Покраска дисков
   const paintingServices = [
-    { 
-      type: 'Литые диски', 
-      r14: '1000', r15: '1000', r16: '2500', r17: '10000', r18: '11000', r19: '11500', r20: '15000', r21r22: '15000'
-    },
-    { 
-      type: 'Штампы', 
-      r14: '600', r15: '600', r16: '1500', r17: '4000', r18: '-', r19: '-', r20: '-', r21r22: '-'
-    },
-    { 
-      type: 'Алмазная проточка дисков', 
-      r14: '7500', r15: '8000', r16: '9000', r17: '9500', r18: '10500', r19: '11000', r20: '12500', r21r22: '14500'
-    },
-    { 
-      type: 'КАНТ', 
-      r14: '4000', r15: '4500', r16: '4750', r17: '5250', r18: '5500', r19: '6250', r20: '-', r21r22: '7250'
-    }
+    { type: 'Покраска 1 диска (базовая)', r14: '1500', r15: '1600', r16: '1700', r17: '1800', r18: '1900', r19: '2000', r20: '2100', r21r22: '2200' },
+    { type: 'Покраска 1 диска (металлик)', r14: '2000', r15: '2100', r16: '2200', r17: '2300', r18: '2400', r19: '2500', r20: '2600', r21r22: '2700' },
+    { type: 'Алмазная проточка', r14: '2500', r15: '2600', r16: '2700', r17: '2800', r18: '2900', r19: '3000', r20: '3100', r21r22: '3200' }
   ];
+
+  const ServiceTable = ({ title, headers, services, keyPrefix }: any) => (
+    <Box sx={{ mb: 4 }}>
+      <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, color: '#E53E3E' }}>
+        {title}
+      </Typography>
+      
+      <Box sx={{ overflowX: 'auto' }}>
+        <Box 
+          sx={{ 
+            display: 'grid',
+            gridTemplateColumns: `200px repeat(${headers.length - 1}, 80px)`,
+            minWidth: 500,
+            gap: 0,
+            border: '1px solid #E2E8F0',
+            borderRadius: 1
+          }}
+        >
+          {/* Заголовки */}
+          {headers.map((header: string, index: number) => (
+            <Box
+              key={index}
+              sx={{
+                p: 1,
+                borderRight: index < headers.length - 1 ? '1px solid #E2E8F0' : 'none',
+                borderBottom: '1px solid #E2E8F0',
+                bgcolor: '#F7FAFC',
+                fontWeight: 600,
+                fontSize: { xs: '0.75rem', md: '0.875rem' },
+                textAlign: index === 0 ? 'left' : 'center'
+              }}
+            >
+              {header}
+            </Box>
+          ))}
+
+          {/* Данные */}
+          {services.map((service: any, rowIndex: number) => 
+            Object.entries(service).map(([key, value], cellIndex) => (
+              <Box
+                key={`${rowIndex}-${cellIndex}`}
+                sx={{
+                  p: 1,
+                  borderRight: cellIndex < Object.keys(service).length - 1 ? '1px solid #E2E8F0' : 'none',
+                  borderBottom: rowIndex < services.length - 1 ? '1px solid #E2E8F0' : 'none',
+                  fontSize: { xs: '0.75rem', md: '0.875rem' },
+                  textAlign: cellIndex === 0 ? 'left' : 'center'
+                }}
+              >
+                {typeof value === 'string' && value.match(/^\d+$/) ? `${value} ₽` : String(value)}
+              </Box>
+            ))
+          )}
+        </Box>
+      </Box>
+    </Box>
+  );
+
+  const AdditionalServices = () => (
+    <Box sx={{ mb: 4 }}>
+      <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, color: '#E53E3E' }}>
+        Дополнительные и ремонтные работы
+      </Typography>
+      
+      <Box sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, 
+        gap: 2 
+      }}>
+        {additionalServices.map((service, index) => (
+          <Box key={index} sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            p: 2,
+            border: '1px solid #E2E8F0',
+            borderRadius: 1
+          }}>
+            <Typography variant="body2" sx={{ flex: 1 }}>
+              {service.name}
+            </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: '#E53E3E' }}>
+              {service.price} ₽
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  );
 
   return (
     <Box sx={{ bgcolor: '#F8F9FA', minHeight: '100vh', py: 4 }}>
@@ -146,9 +205,31 @@ const ServicesPage = () => {
         </Box>
 
         {/* Табы */}
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-          <Tabs value={tabValue} onChange={handleTabChange} centered>
-            <Tab icon={<Build />} label="Основные услуги" />
+        <Box sx={{ 
+          borderBottom: 1, 
+          borderColor: 'divider', 
+          mb: 3,
+          width: '100%',
+          overflow: 'hidden'
+        }}>
+          <Tabs 
+            value={tabValue} 
+            onChange={handleTabChange} 
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+            sx={{
+              '& .MuiTabs-flexContainer': {
+                justifyContent: { xs: 'flex-start', md: 'center' }
+              },
+              '& .MuiTab-root': {
+                minWidth: { xs: 'auto', md: 160 },
+                fontSize: { xs: '0.875rem', md: '1rem' },
+                padding: { xs: '6px 12px', md: '12px 16px' }
+              }
+            }}
+          >
+            <Tab icon={<Build />} label="Услуги" />
             <Tab icon={<CarRepair />} label="Премиум услуги" />
             <Tab icon={<Settings />} label="Правка дисков" />
             <Tab icon={<Palette />} label="Покраска" />
@@ -157,227 +238,40 @@ const ServicesPage = () => {
 
         {/* Основные услуги */}
         <TabPanel value={tabValue} index={0}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h5" sx={{ mb: 3, fontWeight: 600, color: '#E53E3E' }}>
-                Услуги для автомобилей 1 класса
-              </Typography>
-              <TableContainer component={Paper} elevation={0}>
-                <Table>
-                  <TableHead>
-                    <TableRow sx={{ bgcolor: '#F7FAFC' }}>
-                      <TableCell sx={{ fontWeight: 600 }}>Вид работы</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R10-R14</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R15</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R16</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R17</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R18</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R19</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R20</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R21-R22</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {basicServices.map((service, index) => (
-                      <TableRow key={index} hover>
-                        <TableCell sx={{ fontWeight: 500 }}>{service.name}</TableCell>
-                        <TableCell align="center">{service.r10r14} ₽</TableCell>
-                        <TableCell align="center">{service.r15} ₽</TableCell>
-                        <TableCell align="center">{service.r16} ₽</TableCell>
-                        <TableCell align="center">{service.r17} ₽</TableCell>
-                        <TableCell align="center">{service.r18} ₽</TableCell>
-                        <TableCell align="center">{service.r19} ₽</TableCell>
-                        <TableCell align="center">{service.r20} ₽</TableCell>
-                        <TableCell align="center">{service.r21r22} ₽</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
-
-          {/* Дополнительные услуги */}
-          <Card elevation={2} sx={{ mt: 4 }}>
-            <CardContent>
-              <Typography variant="h5" sx={{ mb: 3, fontWeight: 600, color: '#E53E3E' }}>
-                Дополнительные и ремонтные работы
-              </Typography>
-                                                           <Box sx={{ 
-                 display: 'grid', 
-                 gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, 
-                 gap: 2 
-               }}>
-                 {additionalServices.map((service, index) => (
-                   <Box key={index} sx={{ 
-                     display: 'flex', 
-                     justifyContent: 'space-between', 
-                     alignItems: 'center',
-                     p: 2,
-                     bgcolor: '#F7FAFC',
-                     borderRadius: 1
-                   }}>
-                     <Typography variant="body2" sx={{ flex: 1 }}>
-                       {service.name}
-                     </Typography>
-                     <Chip 
-                       label={`${service.price} ₽`} 
-                       color="primary" 
-                       size="small"
-                       sx={{ fontWeight: 600 }}
-                     />
-                   </Box>
-                 ))}
-               </Box>
-            </CardContent>
-          </Card>
+          <ServiceTable 
+            title="Услуги для автомобилей 1 класса"
+            headers={['Вид работы', 'R10-R14', 'R15', 'R16', 'R17', 'R18', 'R19', 'R20', 'R21-R22']}
+            services={basicServices}
+          />
+          <AdditionalServices />
         </TabPanel>
 
         {/* Премиум услуги */}
         <TabPanel value={tabValue} index={1}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h5" sx={{ mb: 3, fontWeight: 600, color: '#E53E3E' }}>
-                Услуги для автомобилей 2-4 классов
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 3, color: '#6C757D' }}>
-                Согласно внутренней классификации и габаритам
-              </Typography>
-              <TableContainer component={Paper} elevation={0}>
-                <Table>
-                  <TableHead>
-                    <TableRow sx={{ bgcolor: '#F7FAFC' }}>
-                      <TableCell sx={{ fontWeight: 600 }}>Вид работы</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R14-R15</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R16</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R17</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R18</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R19</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R20</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R21-R22</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {premiumServices.map((service, index) => (
-                      <TableRow key={index} hover>
-                        <TableCell sx={{ fontWeight: 500 }}>{service.name}</TableCell>
-                        <TableCell align="center">{service.r14r15} ₽</TableCell>
-                        <TableCell align="center">{service.r16} ₽</TableCell>
-                        <TableCell align="center">{service.r17} ₽</TableCell>
-                        <TableCell align="center">{service.r18} ₽</TableCell>
-                        <TableCell align="center">{service.r19} ₽</TableCell>
-                        <TableCell align="center">{service.r20} ₽</TableCell>
-                        <TableCell align="center">{service.r21r22} ₽</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
+          <ServiceTable 
+            title="Услуги для автомобилей 2-4 классов"
+            headers={['Вид работы', 'R14-R15', 'R16', 'R17', 'R18', 'R19', 'R20', 'R21-R22']}
+            services={premiumServices}
+          />
         </TabPanel>
 
         {/* Правка дисков */}
         <TabPanel value={tabValue} index={2}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h5" sx={{ mb: 3, fontWeight: 600, color: '#E53E3E' }}>
-                Правка литых дисков / Прокат штампованных дисков
-              </Typography>
-              <TableContainer component={Paper} elevation={0}>
-                <Table>
-                  <TableHead>
-                    <TableRow sx={{ bgcolor: '#F7FAFC' }}>
-                      <TableCell sx={{ fontWeight: 600 }}>Вид работы</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R13-R14</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R15</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R16</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R17</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R18</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R19</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R20</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R21-R22</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {diskServices.map((service, index) => (
-                      <TableRow key={index} hover>
-                        <TableCell sx={{ fontWeight: 500 }}>{service.name}</TableCell>
-                        <TableCell align="center">{service.r13r14} ₽</TableCell>
-                        <TableCell align="center">{service.r15} ₽</TableCell>
-                        <TableCell align="center">{service.r16} ₽</TableCell>
-                        <TableCell align="center">{service.r17}</TableCell>
-                        <TableCell align="center">{service.r18}</TableCell>
-                        <TableCell align="center">{service.r19}</TableCell>
-                        <TableCell align="center">{service.r20}</TableCell>
-                        <TableCell align="center">{service.r21r22}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
+          <ServiceTable 
+            title="Правка литых дисков / Прокат штампованных дисков"
+            headers={['Вид работы', 'R13-R14', 'R15', 'R16', 'R17', 'R18', 'R19', 'R20', 'R21-R22']}
+            services={diskServices}
+          />
         </TabPanel>
 
         {/* Покраска дисков */}
         <TabPanel value={tabValue} index={3}>
-          <Card elevation={2}>
-            <CardContent>
-              <Typography variant="h5" sx={{ mb: 3, fontWeight: 600, color: '#E53E3E' }}>
-                Покраска дисков и алмазная проточка
-              </Typography>
-              <TableContainer component={Paper} elevation={0}>
-                <Table>
-                  <TableHead>
-                    <TableRow sx={{ bgcolor: '#F7FAFC' }}>
-                      <TableCell sx={{ fontWeight: 600 }}>Тип работы</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R14</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R15</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R16</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R17</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R18</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R19</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R20</TableCell>
-                      <TableCell align="center" sx={{ fontWeight: 600 }}>R21/R22</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {paintingServices.map((service, index) => (
-                      <TableRow key={index} hover>
-                        <TableCell sx={{ fontWeight: 500 }}>{service.type}</TableCell>
-                        <TableCell align="center">{service.r14} ₽</TableCell>
-                        <TableCell align="center">{service.r15} ₽</TableCell>
-                        <TableCell align="center">{service.r16} ₽</TableCell>
-                        <TableCell align="center">{service.r17} ₽</TableCell>
-                        <TableCell align="center">{service.r18}</TableCell>
-                        <TableCell align="center">{service.r19}</TableCell>
-                        <TableCell align="center">{service.r20}</TableCell>
-                        <TableCell align="center">{service.r21r22} ₽</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
+          <ServiceTable 
+            title="Покраска дисков и алмазная проточка"
+            headers={['Тип работы', 'R14', 'R15', 'R16', 'R17', 'R18', 'R19', 'R20', 'R21/R22']}
+            services={paintingServices}
+          />
         </TabPanel>
-
-        {/* Контактная информация */}
-        <Box sx={{ mt: 4, textAlign: 'center' }}>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-            Остались вопросы?
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#6C757D', mb: 2 }}>
-            Звоните нам для консультации и записи на обслуживание
-          </Typography>
-                     <Chip 
-             label="+7 988 644 02 44" 
-             color="primary" 
-             size="medium"
-             sx={{ fontSize: '1.1rem', fontWeight: 600 }}
-           />
-        </Box>
       </Container>
     </Box>
   );

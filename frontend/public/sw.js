@@ -1,69 +1,95 @@
-const CACHE_NAME = 'prokolesa-v1.0.0';
+const CACHE_NAME = "prokolesa-v1.3.0";
 const urlsToCache = [
-  '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
-  '/manifest.json',
-  '/favicon.ico',
-  '/logo192.png',
-  '/logo512.png'
+  "/",
+  "/static/js/main.98e43157.js",
+  "/static/css/main.3253479e.css",
+  "/manifest.json",
+  "/favicon.ico",
+  "/logo192.png",
+  "/logo512.png"
 ];
 
 // Установка Service Worker
-self.addEventListener('install', (event) => {
+self.addEventListener("install", event => {
+  console.log("Service Worker: Install Event");
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Opened cache');
+      .then(cache => {
+        console.log("Service Worker: Caching Files");
         return cache.addAll(urlsToCache);
+      })
+      .then(() => {
+        console.log("Service Worker: Skip Waiting");
+        return self.skipWaiting();
       })
   );
 });
 
 // Активация Service Worker
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", event => {
+  console.log("Service Worker: Activate Event");
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
+        cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
+            console.log("Service Worker: Clearing Old Cache");
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(() => {
+      console.log("Service Worker: Claiming Clients");
+      return self.clients.claim();
     })
   );
 });
 
 // Обработка запросов
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Возвращаем кэшированную версию или загружаем из сети
-        if (response) {
-          return response;
-        }
-        
-        return fetch(event.request).then((response) => {
-          // Проверяем валидность ответа
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+self.addEventListener("fetch", event => {
+  if (event.request.method === "GET") {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => {
+          // Возвращаем кэш, если есть, иначе делаем сетевой запрос
+          if (response) {
             return response;
           }
+          return fetch(event.request).then(response => {
+            // Проверяем, что ответ валидный
+            if (!response || response.status !== 200 || response.type !== "basic") {
+              return response;
+            }
+            
+            // Клонируем ответ для кэша
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+            
+            return response;
+          });
+        })
+    );
+  }
+});
 
-          // Клонируем ответ для кэширования
-          const responseToCache = response.clone();
+// Обработка сообщений для обновления
+self.addEventListener("message", event => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
 
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
-        });
-      })
-  );
+// Уведомление об обновлении
+self.addEventListener("message", event => {
+  if (event.data && event.data.type === "CHECK_UPDATE") {
+    event.ports[0].postMessage({
+      type: "UPDATE_AVAILABLE",
+      version: CACHE_NAME
+    });
+  }
 });
 
 // Push уведомления

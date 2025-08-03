@@ -1,25 +1,21 @@
 [Unit]
 Description=ProKolesa Gunicorn daemon
-Requires=gunicorn.socket
 After=network.target
 
 [Service]
 Type=simple
 User=www-data
 Group=www-data
-RuntimeDirectory=gunicorn
 WorkingDirectory=/var/www/prokolesa/backend
+Environment="DJANGO_SETTINGS_MODULE=prokolesa_backend.settings_production"
 ExecStart=/var/www/prokolesa/backend/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
-          --bind unix:/run/gunicorn/gunicorn.sock \
+          --bind 127.0.0.1:8001 \
           prokolesa_backend.wsgi:application
 ExecReload=/bin/kill -s HUP $MAINPID
-KillMode=mixed
-TimeoutStopSec=5
-PrivateTmp=true
-
-Environment=DJANGO_SETTINGS_MODULE=prokolesa_backend.settings_production
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target 

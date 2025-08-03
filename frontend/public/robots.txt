@@ -1,3 +1,40 @@
+# ProKolesa.pro - Интернет-магазин шин и дисков
 # https://www.robotstxt.org/robotstxt.html
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Основные страницы
+Allow: /catalog
+Allow: /services
+Allow: /contacts
+Allow: /favorites
+Allow: /cart
+
+# API endpoints для поисковых роботов
+Allow: /api/products
+Allow: /api/categories
+Allow: /api/brands
+
+# Запрещенные пути
+Disallow: /admin/
+Disallow: /api/orders/
+Disallow: /checkout/
+Disallow: /test/
+Disallow: /debug/
+
+# Sitemap
+Sitemap: https://prokolesa.pro/sitemap.xml
+
+# Crawl-delay для вежливого сканирования
+Crawl-delay: 1
+
+# Yandex specific
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+# Google specific  
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1

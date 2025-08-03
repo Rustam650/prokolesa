@@ -1,12 +1,16 @@
-const CACHE_NAME = "prokolesa-v1.3.0";
+const CACHE_NAME = "prokolesa-v1.4.0";
 const urlsToCache = [
   "/",
   "/static/js/main.98e43157.js",
-  "/static/css/main.3253479e.css",
+  "/static/css/main.c0689538.css",
   "/manifest.json",
+  "/site.webmanifest",
   "/favicon.ico",
-  "/logo192.png",
-  "/logo512.png"
+  "/favicon.svg",
+  "/favicon-96x96.png",
+  "/apple-touch-icon.png",
+  "/web-app-manifest-192x192.png",
+  "/web-app-manifest-512x512.png"
 ];
 
 // Установка Service Worker

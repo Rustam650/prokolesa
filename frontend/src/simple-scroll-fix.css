@@ -15,4 +15,60 @@ input:focus {
 /* Отключаем smooth scroll для всех элементов */
 * {
   scroll-behavior: auto !important;
+}
+
+/* Мобильные стили для заголовков */
+@media only screen and (max-width: 768px) {
+  /* Заголовки страниц */
+  h1 {
+    font-size: 1.8rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.8rem !important;
+  }
+  
+  h3 {
+    font-size: 1.3rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.6rem !important;
+  }
+  
+  h4 {
+    font-size: 1.1rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Заголовки товаров */
+  .MuiTypography-h4 {
+    font-size: 1.4rem !important;
+    line-height: 1.3 !important;
+  }
+  
+  .MuiTypography-h5 {
+    font-size: 1.2rem !important;
+    line-height: 1.3 !important;
+  }
+  
+  .MuiTypography-h6 {
+    font-size: 1rem !important;
+    line-height: 1.3 !important;
+  }
+  
+  /* Заголовки карточек товаров */
+  .MuiCard-root .MuiTypography-h6 {
+    font-size: 0.9rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Заголовок на странице товара */
+  .MuiContainer-root h1 {
+    font-size: 1.6rem !important;
+    line-height: 1.2 !important;
+  }
 } 

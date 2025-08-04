@@ -363,188 +363,226 @@ const CartPage: React.FC = () => {
               const isProductLoaded = products[item.id] !== undefined;
               
               return (
-                <Card key={item.id} sx={{ 
-                  borderRadius: '16px', 
-                  opacity: isProductLoaded ? 1 : 0.7,
-                  border: '1px solid #E9ECEF',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                  '&:hover': {
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                    transform: 'translateY(-1px)',
-                    transition: 'all 0.2s ease'
-                  }
-                }}>
-                  <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
-                    <Box sx={{ 
-                      display: 'flex', 
-                      gap: { xs: 2, sm: 3 }, 
-                      alignItems: 'center',
-                      flexDirection: 'row'
-                    }}>
-                      {/* Изображение */}
-                      <CardMedia
-                        component="img"
-                        sx={{ 
-                          width: { xs: 80, sm: 100 }, 
-                          height: { xs: 80, sm: 100 }, 
-                          borderRadius: '12px', 
-                          objectFit: 'contain',
-                          backgroundColor: '#F8F9FA',
-                          flexShrink: 0
-                        }}
-                        image={product.image}
-                        alt={product.name}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/placeholder-product.svg';
-                        }}
-                      />
+                                 <Card key={item.id} sx={{ 
+                   borderRadius: '16px', 
+                   opacity: isProductLoaded ? 1 : 0.7,
+                   border: '1px solid #E9ECEF',
+                   boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                   maxWidth: { xs: '100%', sm: 600 },
+                   margin: '0 auto',
+                   '&:hover': {
+                     boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                     transform: 'translateY(-1px)',
+                     transition: 'all 0.2s ease'
+                   }
+                 }}>
+                   <CardContent sx={{ p: { xs: 2, sm: 2.5 } }}>
+                     <Box sx={{ 
+                       display: 'flex', 
+                       gap: { xs: 2, sm: 2.5 }, 
+                       alignItems: 'flex-start',
+                       flexDirection: 'row'
+                     }}>
+                       {/* Изображение */}
+                       <CardMedia
+                         component="img"
+                         sx={{ 
+                           width: { xs: 90, sm: 110 }, 
+                           height: { xs: 90, sm: 110 }, 
+                           borderRadius: '12px', 
+                           objectFit: 'contain',
+                           backgroundColor: '#F8F9FA',
+                           flexShrink: 0,
+                           border: '1px solid #F0F0F0'
+                         }}
+                         image={product.image}
+                         alt={product.name}
+                         onError={(e) => {
+                           const target = e.target as HTMLImageElement;
+                           target.src = '/placeholder-product.svg';
+                         }}
+                       />
                       
-                      {/* Информация о товаре */}
-                      <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography 
-                          variant="h6" 
-                          sx={{ 
-                            fontWeight: 600, 
-                            mb: 0.5,
-                            fontSize: { xs: '1rem', sm: '1.1rem' },
-                            cursor: isProductLoaded ? 'pointer' : 'default',
-                            '&:hover': isProductLoaded ? { color: '#F72525' } : {},
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
-                          }}
-                          onClick={() => {
-                            if (isProductLoaded && product.slug) {
-                              navigate(`/product/${product.slug}`);
-                            }
-                          }}
-                        >
-                          {product.brand} {product.name}
-                        </Typography>
-                        
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
-                          {product.size && (
-                            <Chip 
-                              label={product.size} 
-                              size="small" 
-                              variant="outlined"
-                              sx={{ fontSize: '0.75rem' }}
-                            />
-                          )}
-                          {product.article && (
-                            <Chip 
-                              label={`Арт: ${product.article}`} 
-                              size="small" 
-                              variant="outlined"
-                              sx={{ fontSize: '0.75rem' }}
-                            />
-                          )}
-                        </Box>
-                        
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-                          <Typography variant="h6" sx={{ color: '#F72525', fontWeight: 700, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>
-                            {formatPrice(product.price)} ₽
-                          </Typography>
-                          {product.oldPrice && (
-                            <Typography 
-                              variant="body2" 
-                              sx={{ 
-                                textDecoration: 'line-through', 
-                                color: 'text.secondary'
-                              }}
-                            >
-                              {formatPrice(product.oldPrice)} ₽
-                            </Typography>
-                          )}
-                          <Typography variant="body2" sx={{ color: '#666' }}>
-                            × {item.quantity} = <span style={{ fontWeight: 600, color: '#F72525' }}>{formatPrice(product.price * item.quantity)} ₽</span>
-                          </Typography>
-                        </Box>
-                        
-                        {!isProductLoaded && (
-                          <Alert severity="warning" sx={{ mt: 1 }}>
-                            Информация о товаре загружается...
-                          </Alert>
-                        )}
-                      </Box>
+                                             {/* Информация о товаре */}
+                       <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                         <Box>
+                           <Typography 
+                             variant="h6" 
+                             sx={{ 
+                               fontWeight: 600, 
+                               mb: 1,
+                               fontSize: { xs: '0.95rem', sm: '1.05rem' },
+                               cursor: isProductLoaded ? 'pointer' : 'default',
+                               '&:hover': isProductLoaded ? { color: '#F72525' } : {},
+                               lineHeight: 1.3,
+                               display: '-webkit-box',
+                               WebkitLineClamp: 2,
+                               WebkitBoxOrient: 'vertical',
+                               overflow: 'hidden'
+                             }}
+                             onClick={() => {
+                               if (isProductLoaded && product.slug) {
+                                 navigate(`/product/${product.slug}`);
+                               }
+                             }}
+                           >
+                             {product.brand} {product.name}
+                           </Typography>
+                           
+                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 1.5 }}>
+                             {product.size && (
+                               <Chip 
+                                 label={product.size} 
+                                 size="small" 
+                                 variant="outlined"
+                                 sx={{ 
+                                   fontSize: '0.7rem', 
+                                   height: 24,
+                                   borderColor: '#E0E0E0',
+                                   color: '#666'
+                                 }}
+                               />
+                             )}
+                             {product.article && (
+                               <Chip 
+                                 label={`Арт: ${product.article}`} 
+                                 size="small" 
+                                 variant="outlined"
+                                 sx={{ 
+                                   fontSize: '0.7rem', 
+                                   height: 24,
+                                   borderColor: '#E0E0E0',
+                                   color: '#666'
+                                 }}
+                               />
+                             )}
+                           </Box>
+                         </Box>
+                         
+                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
+                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                             <Typography variant="h6" sx={{ color: '#F72525', fontWeight: 700, fontSize: { xs: '1.1rem', sm: '1.2rem' } }}>
+                               {formatPrice(product.price)} ₽
+                             </Typography>
+                             {product.oldPrice && (
+                               <Typography 
+                                 variant="body2" 
+                                 sx={{ 
+                                   textDecoration: 'line-through', 
+                                   color: '#999',
+                                   fontSize: '0.85rem'
+                                 }}
+                               >
+                                 {formatPrice(product.oldPrice)} ₽
+                               </Typography>
+                             )}
+                           </Box>
+                           
+                           <Typography variant="body2" sx={{ 
+                             color: '#F72525', 
+                             fontWeight: 600,
+                             fontSize: { xs: '0.9rem', sm: '1rem' }
+                           }}>
+                             Итого: {formatPrice(product.price * item.quantity)} ₽
+                           </Typography>
+                         </Box>
+                         
+                         {!isProductLoaded && (
+                           <Alert severity="warning" sx={{ mt: 1, fontSize: '0.8rem' }}>
+                             Информация о товаре загружается...
+                           </Alert>
+                         )}
+                       </Box>
 
-                      {/* Управление количеством */}
-                      <Box sx={{ 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center', 
-                        gap: 1.5,
-                        flexShrink: 0
-                      }}>
-                        <Box sx={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          gap: 0.5,
-                          backgroundColor: '#F8F9FA',
-                          borderRadius: '12px',
-                          p: 0.5
-                        }}>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                            sx={{ 
-                              width: 32, 
-                              height: 32,
-                              backgroundColor: 'white',
-                              '&:hover': { backgroundColor: '#F72525', color: 'white' }
-                            }}
-                          >
-                            <RemoveIcon fontSize="small" />
-                          </IconButton>
-                          
-                          <TextField
-                            value={item.quantity}
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value) || 1;
-                              handleQuantityChange(item.id, value);
-                            }}
-                            size="small"
-                            sx={{ 
-                              width: 50,
-                              '& .MuiOutlinedInput-root': {
-                                backgroundColor: 'white',
-                                borderRadius: '8px',
-                                height: 32
-                              }
-                            }}
-                            inputProps={{ 
-                              style: { textAlign: 'center', fontSize: '0.875rem' },
-                              min: 1
-                            }}
-                          />
-                          
-                          <IconButton
-                            size="small"
-                            onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                            sx={{ 
-                              width: 32, 
-                              height: 32,
-                              backgroundColor: 'white',
-                              '&:hover': { backgroundColor: '#F72525', color: 'white' }
-                            }}
-                          >
-                            <AddIcon fontSize="small" />
-                          </IconButton>
-                        </Box>
-                        
-                        <IconButton
-                          color="error"
-                          size="small"
-                          onClick={() => removeFromCart(item.id)}
-                          sx={{ 
-                            backgroundColor: '#FFF5F5',
-                            '&:hover': { backgroundColor: '#FED7D7' }
-                          }}
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Box>
+                                             {/* Управление количеством */}
+                       <Box sx={{ 
+                         display: 'flex', 
+                         flexDirection: 'column', 
+                         alignItems: 'flex-end', 
+                         gap: 1.5,
+                         flexShrink: 0,
+                         minWidth: 120
+                       }}>
+                         <Box sx={{ 
+                           display: 'flex', 
+                           alignItems: 'center', 
+                           gap: 0.3,
+                           backgroundColor: '#F8F9FA',
+                           borderRadius: '10px',
+                           p: 0.3,
+                           border: '1px solid #E0E0E0'
+                         }}>
+                           <IconButton
+                             size="small"
+                             onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                             sx={{ 
+                               width: 28, 
+                               height: 28,
+                               backgroundColor: 'white',
+                               borderRadius: '6px',
+                               '&:hover': { backgroundColor: '#F72525', color: 'white' },
+                               '&:disabled': { backgroundColor: '#F0F0F0', color: '#CCC' }
+                             }}
+                             disabled={item.quantity <= 1}
+                           >
+                             <RemoveIcon sx={{ fontSize: 16 }} />
+                           </IconButton>
+                           
+                           <TextField
+                             value={item.quantity}
+                             onChange={(e) => {
+                               const value = parseInt(e.target.value) || 1;
+                               handleQuantityChange(item.id, value);
+                             }}
+                             size="small"
+                             sx={{ 
+                               width: 45,
+                               '& .MuiOutlinedInput-root': {
+                                 backgroundColor: 'white',
+                                 borderRadius: '6px',
+                                 height: 28,
+                                 fontSize: '0.8rem',
+                                 '& fieldset': {
+                                   border: 'none'
+                                 }
+                               }
+                             }}
+                             inputProps={{ 
+                               style: { textAlign: 'center', fontSize: '0.8rem', padding: '4px' },
+                               min: 1
+                             }}
+                           />
+                           
+                           <IconButton
+                             size="small"
+                             onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                             sx={{ 
+                               width: 28, 
+                               height: 28,
+                               backgroundColor: 'white',
+                               borderRadius: '6px',
+                               '&:hover': { backgroundColor: '#F72525', color: 'white' }
+                             }}
+                           >
+                             <AddIcon sx={{ fontSize: 16 }} />
+                           </IconButton>
+                         </Box>
+                         
+                         <IconButton
+                           color="error"
+                           size="small"
+                           onClick={() => removeFromCart(item.id)}
+                           sx={{ 
+                             backgroundColor: '#FFF5F5',
+                             borderRadius: '8px',
+                             width: 32,
+                             height: 32,
+                             '&:hover': { backgroundColor: '#FFEBEE', transform: 'scale(1.05)' }
+                           }}
+                         >
+                           <DeleteIcon sx={{ fontSize: 18 }} />
+                         </IconButton>
+                       </Box>
                     </Box>
                   </CardContent>
                 </Card>

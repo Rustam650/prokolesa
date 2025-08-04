@@ -1,11 +1,11 @@
-const CACHE_NAME = "prokolesa-v1.4.3";
-const STATIC_CACHE = "prokolesa-static-v1.4.3";
-const RUNTIME_CACHE = "prokolesa-runtime-v1.4.3";
+const CACHE_NAME = "prokolesa-v1.4.4";
+const STATIC_CACHE = "prokolesa-static-v1.4.4";
+const RUNTIME_CACHE = "prokolesa-runtime-v1.4.4";
 
 // Статические файлы для кэширования
 const urlsToCache = [
   "/",
-  "/static/js/main.a058c8ab.js",
+  "/static/js/main.337de732.js",
   "/static/css/main.7bfffcd4.css",
   "/manifest.json",
   "/site.webmanifest",

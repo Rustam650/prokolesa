@@ -379,55 +379,61 @@ const CartPage: React.FC = () => {
                    }
                  }}>
                    <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
+                                          {/* Мобильная и десктопная версии */}
                      <Box sx={{ 
                        display: 'flex', 
-                       gap: { xs: 2, sm: 2.5 }, 
-                       alignItems: 'flex-start',
-                       flexDirection: 'row'
+                       flexDirection: { xs: 'column', sm: 'row' },
+                       gap: { xs: 2, sm: 2.5 }
                      }}>
-                       {/* Изображение */}
+                       {/* Верхняя часть: Изображение + Информация (мобильная) */}
                        <Box sx={{ 
-                         width: { xs: 100, sm: 120 }, 
-                         height: { xs: 100, sm: 120 }, 
-                         borderRadius: '16px', 
-                         backgroundColor: '#FFFFFF',
-                         flexShrink: 0,
-                         border: '1px solid #E8E8E8',
-                         display: 'flex',
-                         alignItems: 'center',
-                         justifyContent: 'center',
-                         overflow: 'hidden',
-                         boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+                         display: 'flex', 
+                         gap: 2,
+                         alignItems: 'flex-start',
+                         flex: 1
                        }}>
-                         <CardMedia
-                           component="img"
-                           sx={{ 
-                             width: '100%', 
-                             height: '100%', 
-                             objectFit: 'cover',
-                             transition: 'transform 0.2s ease',
-                             '&:hover': {
-                               transform: 'scale(1.05)'
-                             }
-                           }}
-                           image={product.image}
-                           alt={product.name}
-                           onError={(e) => {
-                             const target = e.target as HTMLImageElement;
-                             target.src = '/placeholder-product.svg';
-                           }}
-                         />
-                       </Box>
-                      
-                                             {/* Информация о товаре */}
-                       <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                         <Box>
+                         {/* Изображение */}
+                         <Box sx={{ 
+                           width: { xs: 80, sm: 120 }, 
+                           height: { xs: 80, sm: 120 }, 
+                           borderRadius: '16px', 
+                           backgroundColor: '#FFFFFF',
+                           flexShrink: 0,
+                           border: '1px solid #E8E8E8',
+                           display: 'flex',
+                           alignItems: 'center',
+                           justifyContent: 'center',
+                           overflow: 'hidden',
+                           boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+                         }}>
+                           <CardMedia
+                             component="img"
+                             sx={{ 
+                               width: '100%', 
+                               height: '100%', 
+                               objectFit: 'cover',
+                               transition: 'transform 0.2s ease',
+                               '&:hover': {
+                                 transform: 'scale(1.05)'
+                               }
+                             }}
+                             image={product.image}
+                             alt={product.name}
+                             onError={(e) => {
+                               const target = e.target as HTMLImageElement;
+                               target.src = '/placeholder-product.svg';
+                             }}
+                           />
+                         </Box>
+                         
+                         {/* Информация о товаре */}
+                         <Box sx={{ flex: 1, minWidth: 0 }}>
                            <Typography 
                              variant="h6" 
                              sx={{ 
                                fontWeight: 600, 
                                mb: 1,
-                               fontSize: { xs: '0.95rem', sm: '1.05rem' },
+                               fontSize: { xs: '0.9rem', sm: '1.05rem' },
                                cursor: isProductLoaded ? 'pointer' : 'default',
                                '&:hover': isProductLoaded ? { color: '#F72525' } : {},
                                lineHeight: 1.3,
@@ -445,21 +451,21 @@ const CartPage: React.FC = () => {
                              {product.brand} {product.name}
                            </Typography>
                            
-                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 1.5 }}>
                              {product.size && (
                                <Chip 
                                  label={product.size} 
                                  size="small" 
                                  sx={{ 
-                                   fontSize: '0.75rem', 
-                                   height: 28,
+                                   fontSize: '0.7rem', 
+                                   height: 24,
                                    backgroundColor: '#F0F7FF',
                                    color: '#1565C0',
                                    border: 'none',
                                    fontWeight: 600,
-                                   borderRadius: '14px',
+                                   borderRadius: '12px',
                                    '& .MuiChip-label': {
-                                     px: 1.5
+                                     px: 1
                                    }
                                  }}
                                />
@@ -469,25 +475,23 @@ const CartPage: React.FC = () => {
                                  label={`Арт: ${product.article}`} 
                                  size="small" 
                                  sx={{ 
-                                   fontSize: '0.75rem', 
-                                   height: 28,
+                                   fontSize: '0.7rem', 
+                                   height: 24,
                                    backgroundColor: '#FFF3E0',
                                    color: '#E65100',
                                    border: 'none',
                                    fontWeight: 600,
-                                   borderRadius: '14px',
+                                   borderRadius: '12px',
                                    '& .MuiChip-label': {
-                                     px: 1.5
+                                     px: 1
                                    }
                                  }}
                                />
                              )}
                            </Box>
-                         </Box>
-                         
-                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
+                           
                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                             <Typography variant="h6" sx={{ color: '#F72525', fontWeight: 700, fontSize: { xs: '1.1rem', sm: '1.2rem' } }}>
+                             <Typography variant="h6" sx={{ color: '#F72525', fontWeight: 700, fontSize: { xs: '1rem', sm: '1.2rem' } }}>
                                {formatPrice(product.price)} ₽
                              </Typography>
                              {product.oldPrice && (
@@ -496,7 +500,7 @@ const CartPage: React.FC = () => {
                                  sx={{ 
                                    textDecoration: 'line-through', 
                                    color: '#999',
-                                   fontSize: '0.85rem'
+                                   fontSize: '0.8rem'
                                  }}
                                >
                                  {formatPrice(product.oldPrice)} ₽
@@ -504,30 +508,23 @@ const CartPage: React.FC = () => {
                              )}
                            </Box>
                            
-                           <Typography variant="body2" sx={{ 
-                             color: '#F72525', 
-                             fontWeight: 600,
-                             fontSize: { xs: '0.9rem', sm: '1rem' }
-                           }}>
-                             Итого: {formatPrice(product.price * item.quantity)} ₽
-                           </Typography>
+                           {!isProductLoaded && (
+                             <Alert severity="warning" sx={{ mt: 1, fontSize: '0.75rem' }}>
+                               Информация о товаре загружается...
+                             </Alert>
+                           )}
                          </Box>
-                         
-                         {!isProductLoaded && (
-                           <Alert severity="warning" sx={{ mt: 1, fontSize: '0.8rem' }}>
-                             Информация о товаре загружается...
-                           </Alert>
-                         )}
                        </Box>
-
-                                             {/* Управление количеством */}
+                       
+                       {/* Нижняя часть: Управление количеством (мобильная) / Боковая часть (десктоп) */}
                        <Box sx={{ 
                          display: 'flex', 
-                         flexDirection: 'column', 
-                         alignItems: 'flex-end', 
-                         gap: 1.5,
+                         flexDirection: { xs: 'row', sm: 'column' },
+                         alignItems: { xs: 'center', sm: 'flex-end' },
+                         justifyContent: { xs: 'space-between', sm: 'flex-start' },
+                         gap: { xs: 2, sm: 1.5 },
                          flexShrink: 0,
-                         minWidth: 120
+                         minWidth: { xs: 'auto', sm: 120 }
                        }}>
                          <Box sx={{ 
                            display: 'flex', 
@@ -543,8 +540,8 @@ const CartPage: React.FC = () => {
                              size="small"
                              onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                              sx={{ 
-                               width: 32, 
-                               height: 32,
+                               width: { xs: 28, sm: 32 }, 
+                               height: { xs: 28, sm: 32 },
                                backgroundColor: '#FFFFFF',
                                borderRadius: '12px',
                                border: '1px solid #E2E8F0',
@@ -563,7 +560,7 @@ const CartPage: React.FC = () => {
                              }}
                              disabled={item.quantity <= 1}
                            >
-                             <RemoveIcon sx={{ fontSize: 18 }} />
+                             <RemoveIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
                            </IconButton>
                            
                            <TextField
@@ -574,12 +571,12 @@ const CartPage: React.FC = () => {
                              }}
                              size="small"
                              sx={{ 
-                               width: 50,
+                               width: { xs: 40, sm: 50 },
                                '& .MuiOutlinedInput-root': {
                                  backgroundColor: '#FFFFFF',
                                  borderRadius: '12px',
-                                 height: 32,
-                                 fontSize: '0.9rem',
+                                 height: { xs: 28, sm: 32 },
+                                 fontSize: '0.85rem',
                                  fontWeight: 600,
                                  '& fieldset': {
                                    border: '1px solid #E2E8F0'
@@ -594,7 +591,7 @@ const CartPage: React.FC = () => {
                                }
                              }}
                              inputProps={{ 
-                               style: { textAlign: 'center', fontSize: '0.9rem', padding: '6px' },
+                               style: { textAlign: 'center', fontSize: '0.85rem', padding: '4px' },
                                min: 1
                              }}
                            />
@@ -603,8 +600,8 @@ const CartPage: React.FC = () => {
                              size="small"
                              onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                              sx={{ 
-                               width: 32, 
-                               height: 32,
+                               width: { xs: 28, sm: 32 }, 
+                               height: { xs: 28, sm: 32 },
                                backgroundColor: '#FFFFFF',
                                borderRadius: '12px',
                                border: '1px solid #E2E8F0',
@@ -617,7 +614,7 @@ const CartPage: React.FC = () => {
                                transition: 'all 0.2s ease'
                              }}
                            >
-                             <AddIcon sx={{ fontSize: 18 }} />
+                             <AddIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
                            </IconButton>
                          </Box>
                          
@@ -627,8 +624,8 @@ const CartPage: React.FC = () => {
                            sx={{ 
                              backgroundColor: '#FEF2F2',
                              borderRadius: '12px',
-                             width: 36,
-                             height: 36,
+                             width: { xs: 32, sm: 36 },
+                             height: { xs: 32, sm: 36 },
                              border: '1px solid #FECACA',
                              color: '#DC2626',
                              '&:hover': { 
@@ -641,10 +638,10 @@ const CartPage: React.FC = () => {
                              transition: 'all 0.2s ease'
                            }}
                          >
-                           <DeleteIcon sx={{ fontSize: 20 }} />
+                           <DeleteIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />
                          </IconButton>
                        </Box>
-                    </Box>
+                     </Box>
                   </CardContent>
                 </Card>
               );

@@ -40,7 +40,7 @@
   "categories": ["shopping", "automotive"],
   "lang": "ru",
   "prefer_related_applications": false,
-  "version": "1.4.5",
+  "version": "1.4.6",
   "shortcuts": [
     {
       "name": "Каталог товаров",

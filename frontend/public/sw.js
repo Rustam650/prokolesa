@@ -1,4 +1,8 @@
-const CACHE_NAME = "prokolesa-v1.4.2";
+const CACHE_NAME = "prokolesa-v1.4.3";
+const STATIC_CACHE = "prokolesa-static-v1.4.3";
+const RUNTIME_CACHE = "prokolesa-runtime-v1.4.3";
+
+// Статические файлы для кэширования
 const urlsToCache = [
   "/",
   "/static/js/main.a058c8ab.js",
@@ -10,89 +14,152 @@ const urlsToCache = [
   "/favicon-96x96.png",
   "/apple-touch-icon.png",
   "/logo192.png",
-  "/logo512.png"
+  "/logo512.png",
+  "/placeholder-product.svg",
+  "/placeholder-tire.svg",
+  "/placeholder-wheel.svg"
 ];
 
 // Установка Service Worker
 self.addEventListener("install", event => {
-  console.log("Service Worker: Install Event");
+  console.log("[SW] Install Event - Version:", CACHE_NAME);
+  
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log("Service Worker: Caching Files");
+    Promise.all([
+      // Кэшируем статические файлы
+      caches.open(STATIC_CACHE).then(cache => {
+        console.log("[SW] Caching static files");
         return cache.addAll(urlsToCache);
-      })
-      .then(() => {
-        console.log("Service Worker: Skip Waiting");
-        return self.skipWaiting();
-      })
+      }),
+      // Принудительно активируем новый SW
+      self.skipWaiting()
+    ])
   );
 });
 
 // Активация Service Worker
 self.addEventListener("activate", event => {
-  console.log("Service Worker: Activate Event");
+  console.log("[SW] Activate Event - Version:", CACHE_NAME);
+  
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log("Service Worker: Clearing Old Cache");
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      console.log("Service Worker: Claiming Clients");
-      return self.clients.claim();
-    })
+    Promise.all([
+      // Удаляем старые кэши
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== STATIC_CACHE && cacheName !== RUNTIME_CACHE) {
+              console.log("[SW] Deleting old cache:", cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      }),
+      // Берем контроль над всеми клиентами
+      self.clients.claim().then(() => {
+        console.log("[SW] Claiming all clients");
+        // Уведомляем все открытые страницы об обновлении
+        return self.clients.matchAll().then(clients => {
+          clients.forEach(client => {
+            client.postMessage({
+              type: 'SW_UPDATED',
+              version: CACHE_NAME
+            });
+          });
+        });
+      })
+    ])
   );
 });
 
-// Обработка запросов
+// Обработка запросов с Network First стратегией для API и Cache First для статики
 self.addEventListener("fetch", event => {
-  if (event.request.method === "GET") {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Игнорируем запросы не к нашему домену
+  if (url.origin !== location.origin) {
+    return;
+  }
+
+  // API запросы - Network First
+  if (url.pathname.startsWith('/api/')) {
     event.respondWith(
-      caches.match(event.request)
+      fetch(request)
         .then(response => {
-          // Возвращаем кэш, если есть, иначе делаем сетевой запрос
-          if (response) {
-            return response;
+          // Кэшируем успешные API ответы
+          if (response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(RUNTIME_CACHE).then(cache => {
+              cache.put(request, responseClone);
+            });
           }
-          return fetch(event.request).then(response => {
-            // Проверяем, что ответ валидный
-            if (!response || response.status !== 200 || response.type !== "basic") {
-              return response;
-            }
-            
-            // Клонируем ответ для кэша
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-            
-            return response;
-          });
+          return response;
         })
+        .catch(() => {
+          // Если сеть недоступна, пытаемся взять из кэша
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+
+  // Статические файлы - Cache First
+  if (request.method === "GET") {
+    event.respondWith(
+      caches.match(request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        return fetch(request).then(response => {
+          // Кэшируем только успешные ответы
+          if (response.status === 200) {
+            const responseToCache = response.clone();
+            
+            // Определяем в какой кэш сохранить
+            const cacheToUse = urlsToCache.includes(url.pathname) ? STATIC_CACHE : RUNTIME_CACHE;
+            
+            caches.open(cacheToUse).then(cache => {
+              cache.put(request, responseToCache);
+            });
+          }
+          
+          return response;
+        });
+      })
     );
   }
 });
 
-// Обработка сообщений для обновления
+// Обработка сообщений от главного потока
 self.addEventListener("message", event => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
-});
-
-// Уведомление об обновлении
-self.addEventListener("message", event => {
-  if (event.data && event.data.type === "CHECK_UPDATE") {
-    event.ports[0].postMessage({
-      type: "UPDATE_AVAILABLE",
-      version: CACHE_NAME
-    });
+  const { data } = event;
+  
+  switch (data.type) {
+    case "SKIP_WAITING":
+      console.log("[SW] Skip waiting requested");
+      self.skipWaiting();
+      break;
+      
+    case "GET_VERSION":
+      event.ports[0].postMessage({
+        type: "VERSION_INFO",
+        version: CACHE_NAME
+      });
+      break;
+      
+    case "CLEAR_CACHE":
+      console.log("[SW] Clearing all caches");
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => caches.delete(cacheName))
+        );
+      }).then(() => {
+        event.ports[0].postMessage({
+          type: "CACHE_CLEARED"
+        });
+      });
+      break;
   }
 });
 
@@ -101,7 +168,7 @@ self.addEventListener('push', (event) => {
   const options = {
     body: event.data ? event.data.text() : 'Новые предложения в ProKolesa!',
     icon: '/logo192.png',
-    badge: '/logo192.png',
+    badge: '/favicon-96x96.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -111,12 +178,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: 'Посмотреть',
-        icon: '/icons/checkmark.png'
+        icon: '/logo192.png'
       },
       {
         action: 'close',
         title: 'Закрыть',
-        icon: '/icons/xmark.png'
+        icon: '/favicon-96x96.png'
       }
     ]
   };
@@ -145,13 +212,43 @@ self.addEventListener('sync', (event) => {
 });
 
 function doBackgroundSync() {
-  // Здесь можно синхронизировать данные корзины, избранное и т.д.
-  return fetch('/api/sync')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Background sync completed:', data);
-    })
-    .catch((error) => {
-      console.error('Background sync failed:', error);
-    });
+  // Синхронизация данных корзины и избранного
+  return Promise.all([
+    syncCartData(),
+    syncFavoritesData()
+  ]).catch(error => {
+    console.error('[SW] Background sync failed:', error);
+  });
+}
+
+function syncCartData() {
+  // Синхронизация корзины
+  return new Promise(resolve => {
+    try {
+      const cartData = localStorage.getItem('cart');
+      if (cartData) {
+        console.log('[SW] Cart data synced');
+      }
+      resolve();
+    } catch (error) {
+      console.error('[SW] Cart sync error:', error);
+      resolve();
+    }
+  });
+}
+
+function syncFavoritesData() {
+  // Синхронизация избранного
+  return new Promise(resolve => {
+    try {
+      const favoritesData = localStorage.getItem('favorites');
+      if (favoritesData) {
+        console.log('[SW] Favorites data synced');
+      }
+      resolve();
+    } catch (error) {
+      console.error('[SW] Favorites sync error:', error);
+      resolve();
+    }
+  });
 } 

@@ -97,38 +97,155 @@
     <!-- Service Worker Registration -->
     <script>
       if ("serviceWorker" in navigator) {
+        let refreshing = false;
+        
+        // Обработка сообщений от Service Worker
+        navigator.serviceWorker.addEventListener("message", (event) => {
+          const { data } = event;
+          
+          if (data.type === "SW_UPDATED") {
+            console.log("[App] Service Worker updated to:", data.version);
+            
+            // Показываем уведомление об обновлении
+            if (!refreshing) {
+              refreshing = true;
+              
+              // Создаем красивое уведомление
+              const updateBanner = document.createElement('div');
+              updateBanner.innerHTML = `
+                <div style="
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  background: linear-gradient(135deg, #F72525, #FF6B6B);
+                  color: white;
+                  padding: 16px;
+                  text-align: center;
+                  z-index: 10000;
+                  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                ">
+                  <div style="max-width: 600px; margin: 0 auto;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">
+                      🚀 Доступна новая версия ProKolesa!
+                    </div>
+                    <div style="font-size: 14px; margin-bottom: 12px; opacity: 0.9;">
+                      Обновите страницу, чтобы получить последние улучшения
+                    </div>
+                    <button onclick="window.location.reload()" style="
+                      background: white;
+                      color: #F72525;
+                      border: none;
+                      padding: 8px 20px;
+                      border-radius: 20px;
+                      font-weight: 600;
+                      cursor: pointer;
+                      margin-right: 8px;
+                      transition: all 0.2s ease;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                      Обновить сейчас
+                    </button>
+                    <button onclick="this.parentElement.parentElement.remove(); refreshing = false;" style="
+                      background: transparent;
+                      color: white;
+                      border: 1px solid rgba(255,255,255,0.3);
+                      padding: 8px 16px;
+                      border-radius: 20px;
+                      font-weight: 500;
+                      cursor: pointer;
+                      transition: all 0.2s ease;
+                    " onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+                      Позже
+                    </button>
+                  </div>
+                </div>
+              `;
+              document.body.appendChild(updateBanner);
+              
+              // Автообновление через 10 секунд, если пользователь не нажал "Позже"
+              setTimeout(() => {
+                if (document.body.contains(updateBanner)) {
+                  window.location.reload();
+                }
+              }, 10000);
+            }
+          }
+        });
+
         window.addEventListener("load", function() {
           navigator.serviceWorker.register("%PUBLIC_URL%/sw.js")
             .then(function(registration) {
-              console.log("SW registered: ", registration);
+              console.log("[App] SW registered:", registration);
               
-              // Проверка обновлений при загрузке страницы (не постоянно)
-              let updateShown = false;
+              // Проверяем обновления при загрузке
+              registration.update();
               
-              // Обработка обновлений
+              // Обработка новых версий Service Worker
               registration.addEventListener("updatefound", () => {
                 const newWorker = registration.installing;
+                console.log("[App] New SW found, installing...");
+                
                 newWorker.addEventListener("statechange", () => {
-                  if (newWorker.state === "installed" && navigator.serviceWorker.controller && !updateShown) {
-                    updateShown = true;
-                    // Показать уведомление об обновлении только один раз
-                    if (confirm("Доступна новая версия приложения. Обновить?")) {
-                      newWorker.postMessage({ type: "SKIP_WAITING" });
-                      window.location.reload();
+                  console.log("[App] SW state changed to:", newWorker.state);
+                  
+                  if (newWorker.state === "installed") {
+                    if (navigator.serviceWorker.controller) {
+                      // Есть старый SW, новый готов к активации
+                      console.log("[App] New SW installed, ready to activate");
+                    } else {
+                      // Первая установка
+                      console.log("[App] SW installed for the first time");
                     }
                   }
                 });
               });
             })
-            .catch(function(registrationError) {
-              console.log("SW registration failed: ", registrationError);
+            .catch(function(error) {
+              console.error("[App] SW registration failed:", error);
             });
         });
         
-        // Обработка сообщений от SW
+        // Обработка смены контроллера (когда новый SW активируется)
         navigator.serviceWorker.addEventListener("controllerchange", () => {
-          window.location.reload();
+          console.log("[App] SW controller changed");
+          if (!refreshing) {
+            console.log("[App] Reloading page for new SW");
+            window.location.reload();
+          }
         });
+        
+        // Дополнительные функции для управления SW
+        window.swControl = {
+          // Получить версию SW
+          getVersion: () => {
+            return new Promise((resolve) => {
+              const messageChannel = new MessageChannel();
+              messageChannel.port1.onmessage = (event) => {
+                resolve(event.data.version);
+              };
+              navigator.serviceWorker.controller?.postMessage(
+                { type: "GET_VERSION" },
+                [messageChannel.port2]
+              );
+            });
+          },
+          
+          // Очистить кэш
+          clearCache: () => {
+            return new Promise((resolve) => {
+              const messageChannel = new MessageChannel();
+              messageChannel.port1.onmessage = (event) => {
+                console.log("[App] Cache cleared");
+                resolve();
+              };
+              navigator.serviceWorker.controller?.postMessage(
+                { type: "CLEAR_CACHE" },
+                [messageChannel.port2]
+              );
+            });
+          }
+        };
       }
     </script>
   </body>

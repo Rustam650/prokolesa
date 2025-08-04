@@ -40,5 +40,29 @@
   "categories": ["shopping", "automotive"],
   "lang": "ru",
   "prefer_related_applications": false,
-  "version": "1.4.0"
+  "version": "1.4.3",
+  "shortcuts": [
+    {
+      "name": "Каталог товаров",
+      "short_name": "Каталог",
+      "description": "Просмотр каталога шин и дисков",
+      "url": "/catalog",
+      "icons": [{ "src": "/favicon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Корзина",
+      "short_name": "Корзина",
+      "description": "Просмотр корзины покупок",
+      "url": "/cart",
+      "icons": [{ "src": "/favicon-96x96.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "type": "image/png",
+      "sizes": "1200x630",
+      "form_factor": "wide"
+    }
+  ]
 }

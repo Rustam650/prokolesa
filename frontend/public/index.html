@@ -106,12 +106,13 @@
           if (data.type === "SW_UPDATED") {
             console.log("[App] Service Worker updated to:", data.version);
             
-            // Показываем уведомление об обновлении
-            if (!refreshing) {
+            // Показываем уведомление об обновлении (только если его еще нет)
+            if (!refreshing && !document.getElementById('pwa-update-banner')) {
               refreshing = true;
               
-              // Создаем красивое уведомление
+              // Создаем красивое уведомление с анимацией
               const updateBanner = document.createElement('div');
+              updateBanner.id = 'pwa-update-banner';
               updateBanner.innerHTML = `
                 <div style="
                   position: fixed;
@@ -125,6 +126,8 @@
                   z-index: 10000;
                   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
                   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                  transform: translateY(-100%);
+                  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 ">
                   <div style="max-width: 600px; margin: 0 auto;">
                     <div style="font-weight: 600; margin-bottom: 8px;">
@@ -146,7 +149,18 @@
                     " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                       Обновить сейчас
                     </button>
-                    <button onclick="this.parentElement.parentElement.remove(); refreshing = false;" style="
+                    <button onclick="
+                      const banner = document.getElementById('pwa-update-banner');
+                      if (banner) {
+                        banner.querySelector('div').style.transform = 'translateY(-100%)';
+                        setTimeout(() => {
+                          if (banner && banner.parentElement) {
+                            banner.parentElement.removeChild(banner);
+                          }
+                          refreshing = false;
+                        }, 400);
+                      }
+                    " style="
                       background: transparent;
                       color: white;
                       border: 1px solid rgba(255,255,255,0.3);
@@ -161,14 +175,25 @@
                   </div>
                 </div>
               `;
+              
               document.body.appendChild(updateBanner);
               
-              // Автообновление через 10 секунд, если пользователь не нажал "Позже"
+              // Плавная анимация появления
               setTimeout(() => {
-                if (document.body.contains(updateBanner)) {
+                const bannerDiv = updateBanner.querySelector('div');
+                if (bannerDiv) {
+                  bannerDiv.style.transform = 'translateY(0)';
+                }
+              }, 100);
+              
+              // Автообновление через 20 секунд (увеличено время)
+              setTimeout(() => {
+                const banner = document.getElementById('pwa-update-banner');
+                if (banner) {
+                  console.log("[App] Auto-updating after 20 seconds");
                   window.location.reload();
                 }
-              }, 10000);
+              }, 20000);
             }
           }
         });

@@ -364,19 +364,21 @@ const CartPage: React.FC = () => {
               
               return (
                                  <Card key={item.id} sx={{ 
-                   borderRadius: '16px', 
+                   borderRadius: '20px', 
                    opacity: isProductLoaded ? 1 : 0.7,
-                   border: '1px solid #E9ECEF',
-                   boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                   maxWidth: { xs: '100%', sm: 600 },
+                   border: 'none',
+                   background: 'linear-gradient(145deg, #FFFFFF 0%, #FAFAFA 100%)',
+                   boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                   maxWidth: { xs: '100%', sm: 580 },
                    margin: '0 auto',
+                   overflow: 'hidden',
                    '&:hover': {
-                     boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                     transform: 'translateY(-1px)',
-                     transition: 'all 0.2s ease'
+                     boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+                     transform: 'translateY(-2px)',
+                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                    }
                  }}>
-                   <CardContent sx={{ p: { xs: 2, sm: 2.5 } }}>
+                   <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
                      <Box sx={{ 
                        display: 'flex', 
                        gap: { xs: 2, sm: 2.5 }, 
@@ -384,24 +386,38 @@ const CartPage: React.FC = () => {
                        flexDirection: 'row'
                      }}>
                        {/* Изображение */}
-                       <CardMedia
-                         component="img"
-                         sx={{ 
-                           width: { xs: 90, sm: 110 }, 
-                           height: { xs: 90, sm: 110 }, 
-                           borderRadius: '12px', 
-                           objectFit: 'contain',
-                           backgroundColor: '#F8F9FA',
-                           flexShrink: 0,
-                           border: '1px solid #F0F0F0'
-                         }}
-                         image={product.image}
-                         alt={product.name}
-                         onError={(e) => {
-                           const target = e.target as HTMLImageElement;
-                           target.src = '/placeholder-product.svg';
-                         }}
-                       />
+                       <Box sx={{ 
+                         width: { xs: 100, sm: 120 }, 
+                         height: { xs: 100, sm: 120 }, 
+                         borderRadius: '16px', 
+                         backgroundColor: '#FFFFFF',
+                         flexShrink: 0,
+                         border: '1px solid #E8E8E8',
+                         display: 'flex',
+                         alignItems: 'center',
+                         justifyContent: 'center',
+                         overflow: 'hidden',
+                         boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+                       }}>
+                         <CardMedia
+                           component="img"
+                           sx={{ 
+                             width: '100%', 
+                             height: '100%', 
+                             objectFit: 'cover',
+                             transition: 'transform 0.2s ease',
+                             '&:hover': {
+                               transform: 'scale(1.05)'
+                             }
+                           }}
+                           image={product.image}
+                           alt={product.name}
+                           onError={(e) => {
+                             const target = e.target as HTMLImageElement;
+                             target.src = '/placeholder-product.svg';
+                           }}
+                         />
+                       </Box>
                       
                                              {/* Информация о товаре */}
                        <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -429,17 +445,22 @@ const CartPage: React.FC = () => {
                              {product.brand} {product.name}
                            </Typography>
                            
-                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 1.5 }}>
+                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
                              {product.size && (
                                <Chip 
                                  label={product.size} 
                                  size="small" 
-                                 variant="outlined"
                                  sx={{ 
-                                   fontSize: '0.7rem', 
-                                   height: 24,
-                                   borderColor: '#E0E0E0',
-                                   color: '#666'
+                                   fontSize: '0.75rem', 
+                                   height: 28,
+                                   backgroundColor: '#F0F7FF',
+                                   color: '#1565C0',
+                                   border: 'none',
+                                   fontWeight: 600,
+                                   borderRadius: '14px',
+                                   '& .MuiChip-label': {
+                                     px: 1.5
+                                   }
                                  }}
                                />
                              )}
@@ -447,12 +468,17 @@ const CartPage: React.FC = () => {
                                <Chip 
                                  label={`Арт: ${product.article}`} 
                                  size="small" 
-                                 variant="outlined"
                                  sx={{ 
-                                   fontSize: '0.7rem', 
-                                   height: 24,
-                                   borderColor: '#E0E0E0',
-                                   color: '#666'
+                                   fontSize: '0.75rem', 
+                                   height: 28,
+                                   backgroundColor: '#FFF3E0',
+                                   color: '#E65100',
+                                   border: 'none',
+                                   fontWeight: 600,
+                                   borderRadius: '14px',
+                                   '& .MuiChip-label': {
+                                     px: 1.5
+                                   }
                                  }}
                                />
                              )}
@@ -506,26 +532,38 @@ const CartPage: React.FC = () => {
                          <Box sx={{ 
                            display: 'flex', 
                            alignItems: 'center', 
-                           gap: 0.3,
-                           backgroundColor: '#F8F9FA',
-                           borderRadius: '10px',
-                           p: 0.3,
-                           border: '1px solid #E0E0E0'
+                           gap: 0.5,
+                           backgroundColor: '#F8FAFC',
+                           borderRadius: '16px',
+                           p: 0.5,
+                           border: '1px solid #E2E8F0',
+                           boxShadow: '0 2px 4px rgba(0,0,0,0.04)'
                          }}>
                            <IconButton
                              size="small"
                              onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                              sx={{ 
-                               width: 28, 
-                               height: 28,
-                               backgroundColor: 'white',
-                               borderRadius: '6px',
-                               '&:hover': { backgroundColor: '#F72525', color: 'white' },
-                               '&:disabled': { backgroundColor: '#F0F0F0', color: '#CCC' }
+                               width: 32, 
+                               height: 32,
+                               backgroundColor: '#FFFFFF',
+                               borderRadius: '12px',
+                               border: '1px solid #E2E8F0',
+                               '&:hover': { 
+                                 backgroundColor: '#F72525', 
+                                 color: 'white',
+                                 borderColor: '#F72525',
+                                 transform: 'scale(1.05)'
+                               },
+                               '&:disabled': { 
+                                 backgroundColor: '#F8FAFC', 
+                                 color: '#CBD5E1',
+                                 borderColor: '#F1F5F9'
+                               },
+                               transition: 'all 0.2s ease'
                              }}
                              disabled={item.quantity <= 1}
                            >
-                             <RemoveIcon sx={{ fontSize: 16 }} />
+                             <RemoveIcon sx={{ fontSize: 18 }} />
                            </IconButton>
                            
                            <TextField
@@ -536,19 +574,27 @@ const CartPage: React.FC = () => {
                              }}
                              size="small"
                              sx={{ 
-                               width: 45,
+                               width: 50,
                                '& .MuiOutlinedInput-root': {
-                                 backgroundColor: 'white',
-                                 borderRadius: '6px',
-                                 height: 28,
-                                 fontSize: '0.8rem',
+                                 backgroundColor: '#FFFFFF',
+                                 borderRadius: '12px',
+                                 height: 32,
+                                 fontSize: '0.9rem',
+                                 fontWeight: 600,
                                  '& fieldset': {
-                                   border: 'none'
+                                   border: '1px solid #E2E8F0'
+                                 },
+                                 '&:hover fieldset': {
+                                   borderColor: '#F72525'
+                                 },
+                                 '&.Mui-focused fieldset': {
+                                   borderColor: '#F72525',
+                                   borderWidth: '2px'
                                  }
                                }
                              }}
                              inputProps={{ 
-                               style: { textAlign: 'center', fontSize: '0.8rem', padding: '4px' },
+                               style: { textAlign: 'center', fontSize: '0.9rem', padding: '6px' },
                                min: 1
                              }}
                            />
@@ -557,30 +603,45 @@ const CartPage: React.FC = () => {
                              size="small"
                              onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                              sx={{ 
-                               width: 28, 
-                               height: 28,
-                               backgroundColor: 'white',
-                               borderRadius: '6px',
-                               '&:hover': { backgroundColor: '#F72525', color: 'white' }
+                               width: 32, 
+                               height: 32,
+                               backgroundColor: '#FFFFFF',
+                               borderRadius: '12px',
+                               border: '1px solid #E2E8F0',
+                               '&:hover': { 
+                                 backgroundColor: '#F72525', 
+                                 color: 'white',
+                                 borderColor: '#F72525',
+                                 transform: 'scale(1.05)'
+                               },
+                               transition: 'all 0.2s ease'
                              }}
                            >
-                             <AddIcon sx={{ fontSize: 16 }} />
+                             <AddIcon sx={{ fontSize: 18 }} />
                            </IconButton>
                          </Box>
                          
                          <IconButton
-                           color="error"
                            size="small"
                            onClick={() => removeFromCart(item.id)}
                            sx={{ 
-                             backgroundColor: '#FFF5F5',
-                             borderRadius: '8px',
-                             width: 32,
-                             height: 32,
-                             '&:hover': { backgroundColor: '#FFEBEE', transform: 'scale(1.05)' }
+                             backgroundColor: '#FEF2F2',
+                             borderRadius: '12px',
+                             width: 36,
+                             height: 36,
+                             border: '1px solid #FECACA',
+                             color: '#DC2626',
+                             '&:hover': { 
+                               backgroundColor: '#DC2626', 
+                               color: 'white',
+                               borderColor: '#DC2626',
+                               transform: 'scale(1.1)',
+                               boxShadow: '0 4px 12px rgba(220, 38, 38, 0.3)'
+                             },
+                             transition: 'all 0.2s ease'
                            }}
                          >
-                           <DeleteIcon sx={{ fontSize: 18 }} />
+                           <DeleteIcon sx={{ fontSize: 20 }} />
                          </IconButton>
                        </Box>
                     </Box>

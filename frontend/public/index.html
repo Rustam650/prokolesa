@@ -102,17 +102,16 @@
             .then(function(registration) {
               console.log("SW registered: ", registration);
               
-              // Проверка обновлений каждые 30 секунд
-              setInterval(() => {
-                registration.update();
-              }, 30000);
+              // Проверка обновлений при загрузке страницы (не постоянно)
+              let updateShown = false;
               
               // Обработка обновлений
               registration.addEventListener("updatefound", () => {
                 const newWorker = registration.installing;
                 newWorker.addEventListener("statechange", () => {
-                  if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-                    // Показать уведомление об обновлении
+                  if (newWorker.state === "installed" && navigator.serviceWorker.controller && !updateShown) {
+                    updateShown = true;
+                    // Показать уведомление об обновлении только один раз
                     if (confirm("Доступна новая версия приложения. Обновить?")) {
                       newWorker.postMessage({ type: "SKIP_WAITING" });
                       window.location.reload();

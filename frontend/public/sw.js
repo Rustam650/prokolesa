@@ -1,8 +1,8 @@
-const CACHE_NAME = "prokolesa-v1.4.1";
+const CACHE_NAME = "prokolesa-v1.4.2";
 const urlsToCache = [
   "/",
-  "/static/js/main.bd67525b.js",
-  "/static/css/main.501094a3.css",
+  "/static/js/main.a058c8ab.js",
+  "/static/css/main.7bfffcd4.css",
   "/manifest.json",
   "/site.webmanifest",
   "/favicon.ico",

@@ -72,27 +72,19 @@ input:focus {
     line-height: 1.2 !important;
   }
   
-  /* Мобильные стили для карточек товаров */
-  .MuiCard-root {
+  /* Мобильные стили для карточек товаров в каталоге */
+  .catalog-card .MuiCard-root {
     max-width: 100% !important;
     margin: 0 auto !important;
   }
   
-  /* Ограничиваем ширину карточек на очень маленьких экранах */
-  @media only screen and (max-width: 480px) {
-    .MuiCard-root {
-      max-width: 280px !important;
-      margin: 0 auto !important;
-    }
-  }
-  
-  /* Уменьшаем отступы в карточках на мобильных */
-  .MuiCardContent-root {
+  /* Уменьшаем отступы в карточках каталога на мобильных */
+  .catalog-card .MuiCardContent-root {
     padding: 12px !important;
   }
   
-  /* Уменьшаем высоту изображений в карточках на мобильных */
-  .MuiCardMedia-root {
+  /* Уменьшаем высоту изображений в карточках каталога на мобильных */
+  .catalog-card .MuiCardMedia-root {
     height: 160px !important;
   }
   
